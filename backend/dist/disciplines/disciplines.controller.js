@@ -40,11 +40,17 @@ let DisciplinesController = class DisciplinesController {
     async update(req, body) {
         const { user } = req;
         if (![users_dto_1.Roles.ADMIN, users_dto_1.Roles.EDUCATION_EMPLOYEE].includes(user.role)) {
-            throw new common_1.ForbiddenException('Недостаточно прав');
+            throw new common_1.ForbiddenException({
+                message: 'Недостаточно прав',
+                cause: 'role'
+            });
         }
         const discipline = await this.discipline_service.getDisciplineById(body.id);
         if (!discipline) {
-            throw new common_1.BadRequestException('Дисциплина не найдена');
+            throw new common_1.BadRequestException({
+                message: 'Дисциплина не найдена',
+                cause: 'id'
+            });
         }
         return this.discipline_service.update(body);
     }
@@ -57,7 +63,10 @@ let DisciplinesController = class DisciplinesController {
         }
         const discipline = await this.discipline_service.getDisciplineById(body.id);
         if (!discipline) {
-            throw new common_1.BadRequestException('Дисциплина не найдена');
+            throw new common_1.BadRequestException({
+                message: 'Дисциплина не найдена',
+                cause: 'id'
+            });
         }
         return this.discipline_service.delete(body.id);
     }

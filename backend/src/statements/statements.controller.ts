@@ -124,4 +124,15 @@ export class StatementsController {
     async get() {
         return this.statements_service.get()
     }
+
+    @Post('get_students_personal_card')
+    @UseGuards(AuthGuard)
+    async get_students_personal_card(
+        @Req() req: RequestWithUser,
+        @Body() body: {document_number: string}
+    ) {
+        const student_document_number = body.document_number || req.user.login;
+
+        return this.statements_service.get_students_personal_card(student_document_number)
+    }
 }

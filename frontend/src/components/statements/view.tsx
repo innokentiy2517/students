@@ -3,6 +3,18 @@ import useTypedSelector from "../../store/hooks/useTypedSelector.ts";
 import {useEffect, useState} from "react";
 import useActions from "../../store/hooks/useActions.ts";
 
+export const transform_mark = ({mark, attestation_type}: {mark: number | undefined, attestation_type: string}) => {
+    if(!mark) return 'Нет оценки';
+    switch (attestation_type) {
+        case 'Зачет':
+            if(mark === 5) return 'Зачет';
+            else return 'Не зачет';
+        case 'Экзамен':
+        default:
+            return mark;
+    }
+}
+
 export default function View() {
     const {get_statements, delete_statement, set_mark} = useActions();
 
@@ -13,18 +25,6 @@ export default function View() {
     const [row_to_delete, set_row_to_delete] = useState(0);
 
     const [mark_to_set, set_mark_value] = useState('0');
-
-    const transform_mark = ({mark, attestation_type}: {mark: number | undefined, attestation_type: string}) => {
-        if(!mark) return 'Нет оценки';
-        switch (attestation_type) {
-            case 'Зачет':
-                if(mark === 5) return 'Зачет';
-                else return 'Не зачет';
-            case 'Экзамен':
-            default:
-                return mark;
-        }
-    }
 
     useEffect(() => {
         get_statements();

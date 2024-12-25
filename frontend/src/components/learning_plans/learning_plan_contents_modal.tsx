@@ -3,6 +3,8 @@ import {LearningPlan} from "../../store/learning_plans/learning_plan_slice.ts";
 import useTypedSelector from "../../store/hooks/useTypedSelector.ts";
 import {useForm} from "@mantine/form";
 import useActions from "../../store/hooks/useActions.ts";
+import pdfMake from "pdfmake/build/pdfmake";
+import "pdfmake/build/vfs_fonts";
 
 enum AttestationType {
     EXAM = 'Экзамен',
@@ -181,6 +183,36 @@ export default function LearningPlanContentsModal({learning_plan}:{learning_plan
                             <Table.Td>
                                 <Button type='submit'>Добавить</Button>
                             </Table.Td>
+                        </Table.Tr>
+                        <Table.Tr>
+                            <Button
+                                onClick={() => {
+                                    pdfMake.createPdf({
+                                        pageOrientation: 'landscape',
+                                        content: [
+                                            {
+                                                text: `Учебный план ${learning_plan.speciality.name} ${learning_plan.start_study_year}`,
+                                                style: 'header',
+                                            },
+                                            {
+                                                table:{
+                                                    body:[
+                                                        ['Дисциплина','Количество часов','Семестр','Тип аттестации'],
+                                                        ...learning_plan.learning_plan_contents.map(content => {
+                                                            return [
+                                                                content.discipline.name,
+                                                                content.number_of_hours,
+                                                                content.semester,
+                                                                content.attestation_type
+                                                            ]
+                                                        })
+                                                    ]
+                                                }
+                                            }
+                                        ]
+                                    }).open()
+                                }}
+                            >Отчёт</Button>
                         </Table.Tr>
                     </Table.Tbody>
                 </Table>

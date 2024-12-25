@@ -82,20 +82,6 @@ export const get_learning_plan = createAsyncThunk('learning_plan/get_learning_pl
     return response.data;
 })
 
-// const get_learning_plan_for_group = createAsyncThunk('learning_plan/get_learning_plan_for_group', async ({speciality_id, start_study_year}: { speciality_id: number, start_study_year: number }) => {
-//     const response = await axios.post<LearningPlan>(`http://192.168.0.103:3000/learning_plan/get_learning_plan_for_group`,
-//         {
-//             speciality_id: speciality_id,
-//             start_study_year: start_study_year
-//         },
-//         {
-//             headers: {
-//                 Authorization: `Bearer ${localStorage.getItem('token')}`
-//             }
-//         });
-//     return response.data;
-// })
-
 export const add_learning_plan = createAsyncThunk('learning_plan/add_learning_plan', async (data: LearningPlanAddFormType, {rejectWithValue, fulfillWithValue}) => {
     try {
         const response = await axios.post<LearningPlanAddFormType>('http://192.168.0.103:3000/learning_plan/create',

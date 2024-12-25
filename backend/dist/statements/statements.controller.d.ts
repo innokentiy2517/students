@@ -26,10 +26,10 @@ export declare class StatementsController {
         student: {
             group: {
                 id: number;
+                speciality_id: number;
+                start_study_year: number;
                 group_number: number;
                 group_cipher: string;
-                start_study_year: number;
-                speciality_id: number;
             };
         } & {
             name: string;
@@ -43,9 +43,55 @@ export declare class StatementsController {
         };
     } & {
         id: number;
-        student_id: number;
         date_of_issue: Date;
         mark: number | null;
+        student_id: number;
+        learning_plan_content_id: number;
+    })[]>;
+    get_students_personal_card(req: RequestWithUser, body: {
+        document_number: string;
+    }): Promise<({
+        learning_plan_content: {
+            discipline: {
+                name: string;
+                id: number;
+            };
+        } & {
+            id: number;
+            discipline_id: number;
+            learning_plan_id: number;
+            number_of_hours: number;
+            attestation_type: string;
+            semester: number;
+        };
+        student: {
+            group: {
+                speciality: {
+                    name: string;
+                    id: number;
+                };
+            } & {
+                id: number;
+                speciality_id: number;
+                start_study_year: number;
+                group_number: number;
+                group_cipher: string;
+            };
+        } & {
+            name: string;
+            id: number;
+            surname: string;
+            middle_name: string;
+            date_of_birth: Date;
+            gender: string;
+            group_id: number;
+            document_number: string;
+        };
+    } & {
+        id: number;
+        date_of_issue: Date;
+        mark: number | null;
+        student_id: number;
         learning_plan_content_id: number;
     })[]>;
 }

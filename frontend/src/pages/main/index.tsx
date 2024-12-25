@@ -9,6 +9,8 @@ import {useState} from "react";
 import Specialities from "../../components/specialities";
 import LearningPlans from "../../components/learning_plans";
 import {useDisclosure} from "@mantine/hooks";
+import StudentPersonalCardModal from "../../components/statements/student_personal_card_modal.tsx";
+import AttestationPlan from "../../components/attestation_plan";
 
 const TABS: Record<string, { label: string, component: JSX.Element }> = {
     STUDENTS: {
@@ -37,12 +39,29 @@ const TABS: Record<string, { label: string, component: JSX.Element }> = {
     }
 }
 
+const MODALS: Record<string, { component: JSX.Element, header: string }> = {
+    'default_modal': {
+        component: <></>,
+        header: '',
+    },
+    'STUDENT_PERSONAL_CARD': {
+        component:<StudentPersonalCardModal/>,
+        header: 'Личная карточка студента',
+    },
+    'ATTESTATION_PLAN': {
+        component: <AttestationPlan/>,
+        header: 'План аттестации',
+    }
+}
+
 export default function Main() {
-    const {logout} = useActions();
+    const {logout, drop_student_personal_card} = useActions();
 
     const navigate = useNavigate();
 
-    const [opened, {open, close}] = useDisclosure(false)
+    const [opened, {open, close}] = useDisclosure(false);
+
+    const [active_modal, set_active_modal] = useState('default_modal');
 
     const [key, setKey] = useState('STATEMENTS');
 
@@ -52,11 +71,15 @@ export default function Main() {
         padding="md"
     >
         <Modal
+            size='auto'
             opened={opened}
-            onClose={close}
-            title="Личная карточка студента"
+            onClose={() => {
+                drop_student_personal_card();
+                close();
+            }}
+            title={MODALS[active_modal].header}
         >
-            СОСАЛ?
+            {MODALS[active_modal].component}
         </Modal>
         <AppShell.Header>
             <Group h="100%" justify='space-between'>
@@ -75,7 +98,18 @@ export default function Main() {
                                     </Button>
                                 );
                             })}
-                            <Button onClick={open}>Личная карточка студента</Button>
+                            <Button onClick={()=> {
+                                set_active_modal('STUDENT_PERSONAL_CARD');
+                                open();
+                            }}>Личная карточка студента</Button>
+                            <Button
+                                onClick={() => {
+                                    set_active_modal('ATTESTATION_PLAN');
+                                    open();
+                                }}
+                            >
+                                План аттестации
+                            </Button>
                         </>
                     }
                 </Group>

@@ -64,6 +64,10 @@ let StatementsController = class StatementsController {
     async get() {
         return this.statements_service.get();
     }
+    async get_students_personal_card(req, body) {
+        const student_document_number = body.document_number || req.user.login;
+        return this.statements_service.get_students_personal_card(student_document_number);
+    }
 };
 exports.StatementsController = StatementsController;
 __decorate([
@@ -132,6 +136,15 @@ __decorate([
     __metadata("design:paramtypes", []),
     __metadata("design:returntype", Promise)
 ], StatementsController.prototype, "get", null);
+__decorate([
+    (0, common_1.Post)('get_students_personal_card'),
+    (0, common_1.UseGuards)(auth_guard_1.AuthGuard),
+    __param(0, (0, common_1.Req)()),
+    __param(1, (0, common_1.Body)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [request_dto_1.RequestWithUser, Object]),
+    __metadata("design:returntype", Promise)
+], StatementsController.prototype, "get_students_personal_card", null);
 exports.StatementsController = StatementsController = __decorate([
     (0, common_1.Controller)('statements'),
     __metadata("design:paramtypes", [statements_service_1.StatementsService])

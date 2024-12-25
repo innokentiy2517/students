@@ -12,10 +12,10 @@ export declare class StudentsController {
             };
         } & {
             id: number;
+            speciality_id: number;
+            start_study_year: number;
             group_number: number;
             group_cipher: string;
-            start_study_year: number;
-            speciality_id: number;
         };
     } & {
         name: string;
@@ -37,10 +37,10 @@ export declare class StudentsController {
             };
         } & {
             id: number;
+            speciality_id: number;
+            start_study_year: number;
             group_number: number;
             group_cipher: string;
-            start_study_year: number;
-            speciality_id: number;
         };
     } & {
         name: string;

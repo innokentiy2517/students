@@ -26,11 +26,13 @@ export interface StatementUpdateFormType {
 
 export interface StatementsState {
     statements: Statement[],
-    error: Record<string, string>
+    error: Record<string, string>,
+    student_personal_card?: Statement[] | undefined
 }
 
 const initialState: StatementsState = {
     statements: [],
+    student_personal_card: undefined,
     error: {}
 }
 
@@ -59,6 +61,17 @@ const add_statement = createAsyncThunk(
 
 const get_statements = createAsyncThunk('statements/get_statements', async () => {
     const response = await axios.get<Statement[]>('http://192.168.0.103:3000/statements/get', {
+        headers: {
+            Authorization: `Bearer ${localStorage.getItem('token')}`
+        }
+    })
+    return response.data;
+});
+
+const get_students_personal_card = createAsyncThunk('statements/get_students_personal_card', async (document_number: string) => {
+    const response = await axios.post<Statement[]>('http://192.168.0.103:3000/statements/get_students_personal_card', {
+        document_number
+    },{
         headers: {
             Authorization: `Bearer ${localStorage.getItem('token')}`
         }
@@ -106,7 +119,11 @@ const delete_statement = createAsyncThunk('statements/delete', async (id: number
 export const statementsSlice = createSlice({
     name: 'statements',
     initialState,
-    reducers: {},
+    reducers: {
+        drop_student_personal_card: (state) => {
+            state.student_personal_card = undefined
+        }
+    },
     extraReducers: {
         [add_statement.fulfilled.type]: (state) => {
             state.error = {};
@@ -118,6 +135,12 @@ export const statementsSlice = createSlice({
             state.statements = action.payload;
         },
         [get_statements.rejected.type]: (state, action) => {
+            state.error[action.payload.cause] = action.payload.message;
+        },
+        [get_students_personal_card.fulfilled.type]: (state, action) => {
+            state.student_personal_card = action.payload;
+        },
+        [get_students_personal_card.rejected.type]: (state, action) => {
             state.error[action.payload.cause] = action.payload.message;
         },
         [set_mark.fulfilled.type]: (state) => {
@@ -139,6 +162,7 @@ export const StatementsActions = {
     ...statementsSlice.actions,
     add_statement,
     get_statements,
+    get_students_personal_card,
     set_mark,
     delete_statement
 }

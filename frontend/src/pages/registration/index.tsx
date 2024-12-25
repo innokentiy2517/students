@@ -6,7 +6,7 @@ import useTypedSelector from "../../store/hooks/useTypedSelector.ts";
 import {useNavigate} from "react-router-dom";
 
 enum Roles {
-    TEACHER = 'Преподователь',
+    TEACHER = 'Преподаватель',
     DIRECTORATE_EMPLOYEE = 'Сотрудник дирекции',
     EDUCATION_EMPLOYEE = 'Сотрудник учебного отдела',
     ADMIN = 'Администратор',

@@ -67,7 +67,10 @@ export class LearningPlanController {
         const { user } = req;
 
         if(![Roles.ADMIN, Roles.EDUCATION_EMPLOYEE].includes(user.role as Roles)) {
-            throw new ForbiddenException('Недостаточно прав');
+            throw new ForbiddenException({
+                message:'Недостаточно прав',
+                cause: 'role'
+            });
         }
 
         if(await this.learning_plan_service.getLearningPlan(body)){
@@ -129,7 +132,10 @@ export class LearningPlanController {
         const { user } = req;
 
         if(![Roles.ADMIN, Roles.EDUCATION_EMPLOYEE].includes(user.role as Roles)) {
-            throw new ForbiddenException('Недостаточно прав');
+            throw new ForbiddenException({
+                message:'Недостаточно прав',
+                cause: 'role'
+            });
         }
 
         if(await this.learning_plan_service.getLearningPlanByYearAndSpecialityId(body)){

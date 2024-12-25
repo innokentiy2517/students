@@ -77,13 +77,6 @@ let GroupsController = class GroupsController {
         }
         return this.groups_service.delete(body.id);
     }
-    async getGroupPerformance(req, body) {
-        const { user } = req;
-        if (user.role !== users_dto_1.Roles.EDUCATION_EMPLOYEE) {
-            throw new common_1.ForbiddenException('Недостаточно прав');
-        }
-        const group = await this.groups_service.getGroupPerformance(body.group_id);
-    }
 };
 exports.GroupsController = GroupsController;
 __decorate([
@@ -167,13 +160,6 @@ __decorate([
     __metadata("design:paramtypes", [request_dto_1.RequestWithUser, Object]),
     __metadata("design:returntype", Promise)
 ], GroupsController.prototype, "delete", null);
-__decorate([
-    __param(0, (0, common_1.Req)()),
-    __param(1, (0, common_1.Body)()),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", [request_dto_1.RequestWithUser, Object]),
-    __metadata("design:returntype", Promise)
-], GroupsController.prototype, "getGroupPerformance", null);
 exports.GroupsController = GroupsController = __decorate([
     (0, common_1.Controller)('groups'),
     __metadata("design:paramtypes", [groups_service_1.GroupsService])

@@ -65,6 +65,31 @@ let StatementsService = class StatementsService {
             }
         });
     }
+    get_students_personal_card(student_document_number) {
+        return this.prisma_service.statements.findMany({
+            where: {
+                student: {
+                    document_number: student_document_number
+                }
+            },
+            include: {
+                student: {
+                    include: {
+                        group: {
+                            include: {
+                                speciality: true
+                            }
+                        }
+                    }
+                },
+                learning_plan_content: {
+                    include: {
+                        discipline: true
+                    }
+                }
+            }
+        });
+    }
 };
 exports.StatementsService = StatementsService;
 exports.StatementsService = StatementsService = __decorate([

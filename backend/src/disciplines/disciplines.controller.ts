@@ -67,13 +67,19 @@ export class DisciplinesController {
         const {user} = req;
 
         if(![Roles.ADMIN, Roles.EDUCATION_EMPLOYEE].includes(user.role as Roles)) {
-            throw new ForbiddenException('Недостаточно прав');
+            throw new ForbiddenException({
+                message: 'Недостаточно прав',
+                cause: 'role'
+            });
         }
 
         const discipline = await this.discipline_service.getDisciplineById(body.id)
 
         if(!discipline) {
-            throw new BadRequestException('Дисциплина не найдена')
+            throw new BadRequestException({
+                message: 'Дисциплина не найдена',
+                cause: 'id'
+            })
         }
 
         return this.discipline_service.update(body)
@@ -105,7 +111,10 @@ export class DisciplinesController {
         const discipline = await this.discipline_service.getDisciplineById(body.id)
 
         if(!discipline) {
-            throw new BadRequestException('Дисциплина не найдена')
+            throw new BadRequestException({
+                message:'Дисциплина не найдена',
+                cause: 'id'
+            })
         }
 
         return this.discipline_service.delete(body.id)

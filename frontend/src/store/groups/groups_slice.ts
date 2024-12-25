@@ -19,9 +19,9 @@ export interface GroupsState {
 
 export interface GroupAddFormType {
     group_cipher: string,
-    group_number: number,
-    speciality_id: number,
-    start_study_year: number
+    group_number: number | null,
+    speciality_id: number | null,
+    start_study_year: number | null
 }
 
 const initialState: GroupsState = {

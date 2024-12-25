@@ -11,7 +11,4 @@ export declare class GroupsController {
     delete(req: RequestWithUser, body: {
         id: number;
     }): Promise<void>;
-    getGroupPerformance(req: RequestWithUser, body: {
-        group_id: number;
-    }): Promise<void>;
 }

@@ -29,7 +29,10 @@ export class SpecialitiesController {
         const { user } = req;
 
         if(![Roles.ADMIN, Roles.EDUCATION_EMPLOYEE].includes(user.role as Roles)) {
-            throw new ForbiddenException('Недостаточно прав');
+            throw new ForbiddenException({
+                message:'Недостаточно прав',
+                cause: 'role'
+            });
         }
 
         if(await this.specialities_service.getSpecialityByName(body.name)) {
@@ -77,7 +80,10 @@ export class SpecialitiesController {
         const { user } = req;
 
         if(![Roles.ADMIN, Roles.EDUCATION_EMPLOYEE].includes(user.role as Roles)) {
-            throw new ForbiddenException('Недостаточно прав');
+            throw new ForbiddenException({
+                message:'Недостаточно прав',
+                cause: 'role'
+            });
         }
 
         return this.specialities_service.updateById(body);

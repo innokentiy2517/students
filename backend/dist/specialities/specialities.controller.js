@@ -27,7 +27,10 @@ let SpecialitiesController = class SpecialitiesController {
     async create(body, req) {
         const { user } = req;
         if (![users_dto_1.Roles.ADMIN, users_dto_1.Roles.EDUCATION_EMPLOYEE].includes(user.role)) {
-            throw new common_1.ForbiddenException('Недостаточно прав');
+            throw new common_1.ForbiddenException({
+                message: 'Недостаточно прав',
+                cause: 'role'
+            });
         }
         if (await this.specialities_service.getSpecialityByName(body.name)) {
             throw new common_1.BadRequestException({
@@ -43,7 +46,10 @@ let SpecialitiesController = class SpecialitiesController {
     async updateById(body, req) {
         const { user } = req;
         if (![users_dto_1.Roles.ADMIN, users_dto_1.Roles.EDUCATION_EMPLOYEE].includes(user.role)) {
-            throw new common_1.ForbiddenException('Недостаточно прав');
+            throw new common_1.ForbiddenException({
+                message: 'Недостаточно прав',
+                cause: 'role'
+            });
         }
         return this.specialities_service.updateById(body);
     }

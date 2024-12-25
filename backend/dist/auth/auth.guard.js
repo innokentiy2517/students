@@ -21,7 +21,10 @@ let AuthGuard = class AuthGuard {
         const request = context.switchToHttp().getRequest();
         const token = this.extractTokenFromHeader(request);
         if (!token) {
-            throw new common_1.UnauthorizedException('Требуется авторизация');
+            throw new common_1.UnauthorizedException({
+                message: 'Требуется авторизация',
+                cause: 'token'
+            });
         }
         try {
             const payload = await this.jwtService.verifyAsync(token, {
@@ -30,7 +33,10 @@ let AuthGuard = class AuthGuard {
             request['user'] = payload;
         }
         catch {
-            throw new common_1.UnauthorizedException('Требуется авторизация');
+            throw new common_1.UnauthorizedException({
+                message: 'Требуется авторизация',
+                cause: 'token'
+            });
         }
         return true;
     }

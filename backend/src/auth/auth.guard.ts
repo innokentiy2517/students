@@ -16,7 +16,10 @@ export class AuthGuard implements CanActivate {
         const request = context.switchToHttp().getRequest();
         const token = this.extractTokenFromHeader(request);
         if (!token) {
-            throw new UnauthorizedException('Требуется авторизация');
+            throw new UnauthorizedException({
+                message:'Требуется авторизация',
+                cause: 'token'
+            });
         }
         try {
             const payload = await this.jwtService.verifyAsync(
@@ -28,7 +31,10 @@ export class AuthGuard implements CanActivate {
 
             request['user'] = payload;
         } catch {
-            throw new UnauthorizedException('Требуется авторизация');
+            throw new UnauthorizedException({
+                message:'Требуется авторизация',
+                cause: 'token'
+            });
         }
         return true;
     }

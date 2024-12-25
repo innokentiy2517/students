@@ -1,0 +1,90 @@
+//// ------------------------------------------------------
+//// THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+//// ------------------------------------------------------
+
+Table Students {
+  id Int [pk, increment]
+  surname String [not null]
+  name String [not null]
+  middle_name String [not null]
+  date_of_birth DateTime [not null]
+  gender String [not null]
+  group_id Int [not null]
+  group Groups [not null]
+  statements Statements [not null]
+  document_number String [not null]
+}
+
+Table Groups {
+  id Int [pk, increment]
+  group_number Int [not null]
+  group_cipher String [not null]
+  start_study_year Int [not null]
+  students Students [not null]
+  speciality_id Int [not null, default: 0]
+  speciality Specialities [not null]
+}
+
+Table Disciplines {
+  id Int [pk, increment]
+  name String [not null]
+  learning_plan_contents Learning_plan_content [not null]
+}
+
+Table Statements {
+  id Int [pk, increment]
+  date_of_issue DateTime [not null]
+  mark Int
+  student_id Int [not null]
+  student Students [not null]
+  learning_plan_content_id Int [not null]
+  learning_plan_content Learning_plan_content [not null]
+}
+
+Table Users {
+  id Int [pk, increment]
+  login String [unique, not null]
+  password String [not null]
+  role String [not null]
+}
+
+Table Specialities {
+  id Int [pk, increment]
+  name String [unique, not null]
+  learning_plans Learning_plan [not null]
+  groups Groups [not null]
+}
+
+Table Learning_plan_content {
+  id Int [pk, increment]
+  discipline_id Int [not null]
+  discipline Disciplines [not null]
+  learning_plan_id Int [not null]
+  learning_plan Learning_plan [not null]
+  number_of_hours Int [not null]
+  attestation_type String [not null]
+  semester Int [not null]
+  statements Statements [not null]
+}
+
+Table Learning_plan {
+  id Int [pk, increment]
+  speciality_id Int [not null]
+  speciality Specialities [not null]
+  learning_plan_contents Learning_plan_content [not null]
+  start_study_year Int [not null]
+}
+
+Ref: Students.group_id > Groups.id [delete: Cascade]
+
+Ref: Groups.speciality_id > Specialities.id [delete: Cascade]
+
+Ref: Statements.student_id > Students.id [delete: Cascade]
+
+Ref: Statements.learning_plan_content_id > Learning_plan_content.id [delete: Cascade]
+
+Ref: Learning_plan_content.discipline_id > Disciplines.id [delete: Cascade]
+
+Ref: Learning_plan_content.learning_plan_id > Learning_plan.id [delete: Cascade]
+
+Ref: Learning_plan.speciality_id > Specialities.id [delete: Cascade]

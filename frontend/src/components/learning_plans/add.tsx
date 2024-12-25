@@ -61,11 +61,12 @@ export default function Add() {
                     style={{gap: '10px', display: 'flex', flexDirection: 'column'}}
                 >
                     <Select
+                        placeholder='Выберите специальность'
                         data={specialities.map(speciality => ({value: speciality.id.toString(), label: speciality.name}))}
                         {...form.getInputProps('speciality_id')}
                     />
                     <NumberInput
-                        placeholder='Введите год начала учебного плана'
+                        placeholder='Введите год начала обучения'
                         {...form.getInputProps('start_study_year')}
                     />
                     <Button type='submit'>

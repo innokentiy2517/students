@@ -156,17 +156,4 @@ export class GroupsController {
 
         return this.groups_service.delete(body.id)
     }
-
-    async getGroupPerformance(
-        @Req() req: RequestWithUser,
-        @Body() body: { group_id: number }
-    ){
-        const {user} = req;
-
-        if(user.role !== Roles.EDUCATION_EMPLOYEE) {
-            throw new ForbiddenException('Недостаточно прав');
-        }
-
-        const group = await this.groups_service.getGroupPerformance(body.group_id)
-    }
 }

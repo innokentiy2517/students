@@ -26,12 +26,6 @@ export default function Add() {
 
     const form = useForm<GroupAddFormType>({
        mode: 'uncontrolled',
-       initialValues: {
-           group_cipher: '',
-           group_number: 0,
-           speciality_id: 0,
-           start_study_year: 0,
-       },
        validate: {
            group_cipher: value => {
                if (!value) {
@@ -95,11 +89,11 @@ export default function Add() {
                     style={{gap: '10px', display: 'flex', flexDirection: 'column'}}
                 >
                     <TextInput
-                        label='Шифр группы'
+                        placeholder='Шифр группы'
                         {...form.getInputProps('group_cipher')}
                     />
                     <NumberInput
-                        label='Год начала обучения'
+                        placeholder='Год начала обучения'
                         min={0}
                         max={100}
                         {...form.getInputProps('start_study_year')}
@@ -107,11 +101,11 @@ export default function Add() {
                     <NumberInput
                         min={0}
                         max={100}
-                        label='Номер группы'
+                        placeholder='Номер группы'
                         {...form.getInputProps('group_number')}
                     />
                     <Select
-                        label='Специальность'
+                        placeholder='Специальность'
                         data={specialities.map(speciality => ({value: speciality.id.toString(), label: speciality.name}))}
                         {...form.getInputProps('speciality_id')}
                     />

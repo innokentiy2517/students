@@ -36,7 +36,10 @@ let LearningPlanController = class LearningPlanController {
     async create(req, body) {
         const { user } = req;
         if (![users_dto_1.Roles.ADMIN, users_dto_1.Roles.EDUCATION_EMPLOYEE].includes(user.role)) {
-            throw new common_1.ForbiddenException('Недостаточно прав');
+            throw new common_1.ForbiddenException({
+                message: 'Недостаточно прав',
+                cause: 'role'
+            });
         }
         if (await this.learning_plan_service.getLearningPlan(body)) {
             throw new common_1.BadRequestException({
@@ -59,7 +62,10 @@ let LearningPlanController = class LearningPlanController {
     async update_start_year(body, req) {
         const { user } = req;
         if (![users_dto_1.Roles.ADMIN, users_dto_1.Roles.EDUCATION_EMPLOYEE].includes(user.role)) {
-            throw new common_1.ForbiddenException('Недостаточно прав');
+            throw new common_1.ForbiddenException({
+                message: 'Недостаточно прав',
+                cause: 'role'
+            });
         }
         if (await this.learning_plan_service.getLearningPlanByYearAndSpecialityId(body)) {
             throw new common_1.BadRequestException({
