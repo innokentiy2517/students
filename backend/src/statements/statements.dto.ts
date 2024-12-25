@@ -15,7 +15,7 @@ class StatementsDto implements Statements {
     student_id: number;
 
     @ApiProperty()
-    discipline_id: number;
+    learning_plan_content_id: number
 }
 
 class CreateStatementDto {

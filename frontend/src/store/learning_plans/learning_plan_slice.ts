@@ -26,7 +26,8 @@ export interface LearningPlan {
 export interface LearningPlanState {
     learning_plans: LearningPlan[],
     error: Record<string, string>,
-    learning_plan_for_modal: LearningPlan
+    learning_plan_for_modal: LearningPlan,
+    learning_plan_for_group: LearningPlan
 }
 
 export interface LearningPlanAddFormType {
@@ -38,6 +39,16 @@ const initialState: LearningPlanState = {
     learning_plans: [],
     error: {},
     learning_plan_for_modal: {
+        id: 0,
+        start_study_year: 0,
+        speciality_id: 0,
+        speciality: {
+            id: 0,
+            name: ''
+        },
+        learning_plan_contents: []
+    },
+    learning_plan_for_group: {
         id: 0,
         start_study_year: 0,
         speciality_id: 0,
@@ -70,6 +81,20 @@ export const get_learning_plan = createAsyncThunk('learning_plan/get_learning_pl
         });
     return response.data;
 })
+
+// const get_learning_plan_for_group = createAsyncThunk('learning_plan/get_learning_plan_for_group', async ({speciality_id, start_study_year}: { speciality_id: number, start_study_year: number }) => {
+//     const response = await axios.post<LearningPlan>(`http://192.168.0.103:3000/learning_plan/get_learning_plan_for_group`,
+//         {
+//             speciality_id: speciality_id,
+//             start_study_year: start_study_year
+//         },
+//         {
+//             headers: {
+//                 Authorization: `Bearer ${localStorage.getItem('token')}`
+//             }
+//         });
+//     return response.data;
+// })
 
 export const add_learning_plan = createAsyncThunk('learning_plan/add_learning_plan', async (data: LearningPlanAddFormType, {rejectWithValue, fulfillWithValue}) => {
     try {
@@ -180,6 +205,9 @@ export const learningPlanSlice = createSlice({
     reducers: {
         drop_error: (state) => {
             state.error = {};
+        },
+        get_learning_plans_for_student: (state, action) => {
+            state.learning_plan_for_group = state.learning_plans.find(el => el.start_study_year === action.payload.start_study_year && el.speciality_id === action.payload.speciality_id)!;
         }
     },
     extraReducers: {

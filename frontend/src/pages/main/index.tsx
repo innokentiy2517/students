@@ -1,5 +1,5 @@
 import useActions from "../../store/hooks/useActions.ts";
-import {AppShell, Button, Group} from "@mantine/core";
+import {AppShell, Button, Group, Modal} from "@mantine/core";
 import {useNavigate} from "react-router-dom";
 import Groups from "../../components/groups";
 import Statements from "../../components/statements";
@@ -8,6 +8,7 @@ import Students from "../../components/students";
 import {useState} from "react";
 import Specialities from "../../components/specialities";
 import LearningPlans from "../../components/learning_plans";
+import {useDisclosure} from "@mantine/hooks";
 
 const TABS: Record<string, { label: string, component: JSX.Element }> = {
     STUDENTS: {
@@ -41,6 +42,8 @@ export default function Main() {
 
     const navigate = useNavigate();
 
+    const [opened, {open, close}] = useDisclosure(false)
+
     const [key, setKey] = useState('STATEMENTS');
 
     return (
@@ -48,22 +51,32 @@ export default function Main() {
         header={{ height: 60 }}
         padding="md"
     >
+        <Modal
+            opened={opened}
+            onClose={close}
+            title="Личная карточка студента"
+        >
+            СОСАЛ?
+        </Modal>
         <AppShell.Header>
             <Group h="100%" justify='space-between'>
                 <Group justify="space-between" h="100%" px="md">
                     {
-                        Object.entries(TABS).map(([key, value]) => {
-                            return (
-                                <Button
-                                    key={key}
-                                    onClick={() => {
-                                        setKey(key)
-                                    }}
-                                >
-                                    {value.label}
-                                </Button>
-                            );
-                        })
+                        <>
+                            {Object.entries(TABS).map(([key, value]) => {
+                                return (
+                                    <Button
+                                        key={key}
+                                        onClick={() => {
+                                            setKey(key)
+                                        }}
+                                    >
+                                        {value.label}
+                                    </Button>
+                                );
+                            })}
+                            <Button onClick={open}>Личная карточка студента</Button>
+                        </>
                     }
                 </Group>
                 <Group justify="space-evenly" h="100%" px="md">

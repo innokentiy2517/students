@@ -7,8 +7,8 @@ export declare class StudentsController {
     getAll(): Promise<({
         group: {
             speciality: {
-                id: number;
                 name: string;
+                id: number;
             };
         } & {
             id: number;
@@ -18,9 +18,9 @@ export declare class StudentsController {
             speciality_id: number;
         };
     } & {
+        name: string;
         id: number;
         surname: string;
-        name: string;
         middle_name: string;
         date_of_birth: Date;
         gender: string;
@@ -32,8 +32,8 @@ export declare class StudentsController {
     }): Promise<{
         group: {
             speciality: {
-                id: number;
                 name: string;
+                id: number;
             };
         } & {
             id: number;
@@ -43,9 +43,9 @@ export declare class StudentsController {
             speciality_id: number;
         };
     } & {
+        name: string;
         id: number;
         surname: string;
-        name: string;
         middle_name: string;
         date_of_birth: Date;
         gender: string;
@@ -54,9 +54,9 @@ export declare class StudentsController {
     }>;
     create(req: RequestWithUser, body: CreateStudentDto): Promise<void>;
     update(body: StudentsDto): Promise<{
+        name: string;
         id: number;
         surname: string;
-        name: string;
         middle_name: string;
         date_of_birth: Date;
         gender: string;
@@ -66,9 +66,9 @@ export declare class StudentsController {
     deleteStudent(req: RequestWithUser, body: {
         id: number;
     }): import(".prisma/client").Prisma.Prisma__StudentsClient<{
+        name: string;
         id: number;
         surname: string;
-        name: string;
         middle_name: string;
         date_of_birth: Date;
         gender: string;

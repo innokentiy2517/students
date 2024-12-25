@@ -25,34 +25,44 @@ let StatementsController = class StatementsController {
         this.statements_service = statements_service;
     }
     async create(req, body) {
-        if (req.user.role !== users_dto_1.Roles.DIRECTORATE_EMPLOYEE) {
-            throw new common_1.ForbiddenException('Недостаточно прав');
+        if (![users_dto_1.Roles.ADMIN, users_dto_1.Roles.DIRECTORATE_EMPLOYEE].includes(req.user.role)) {
+            throw new common_1.ForbiddenException({ message: 'Недостаточно прав', cause: 'role' });
         }
         const statements = await this.statements_service.getActiveStatementsByStudentAndDiscipline(body.student_id, body.discipline_id);
         if (statements.length > 0) {
-            throw new common_1.BadRequestException('У студента уже есть активная ведомость по данному предмету');
+            throw new common_1.BadRequestException({ message: 'У студента уже есть активная ведомость по данному предмету', cause: 'discipline_id' });
         }
         return this.statements_service.create(body);
     }
     async set_mark(req, body) {
-        if (req.user.role !== users_dto_1.Roles.TEACHER) {
-            throw new common_1.ForbiddenException('Недостаточно прав');
+        if (![users_dto_1.Roles.ADMIN, users_dto_1.Roles.DIRECTORATE_EMPLOYEE, users_dto_1.Roles.TEACHER].includes(req.user.role)) {
+            throw new common_1.ForbiddenException({
+                cause: 'role', message: 'Недостаточно прав'
+            });
         }
         const statement = await this.statements_service.getStatementById(body.id);
         if (!statement) {
-            throw new common_1.BadRequestException('Ведомость не найдена');
+            throw new common_1.BadRequestException({
+                cause: 'id', message: 'Ведомость не найдена'
+            });
         }
         return this.statements_service.set_mark(body);
     }
     async delete(req, body) {
-        if (req.user.role !== users_dto_1.Roles.DIRECTORATE_EMPLOYEE) {
-            throw new common_1.ForbiddenException('Недостаточно прав');
+        if (![users_dto_1.Roles.ADMIN, users_dto_1.Roles.DIRECTORATE_EMPLOYEE].includes(req.user.role)) {
+            throw new common_1.ForbiddenException({
+                message: 'Недостаточно прав',
+                cause: 'role'
+            });
         }
         const statement = await this.statements_service.getStatementById(body.id);
         if (!statement) {
-            throw new common_1.BadRequestException('Ведомость не найдена');
+            throw new common_1.BadRequestException({ message: 'Ведомость не найдена', cause: 'id' });
         }
         return this.statements_service.delete(body.id);
+    }
+    async get() {
+        return this.statements_service.get();
     }
 };
 exports.StatementsController = StatementsController;
@@ -84,6 +94,7 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], StatementsController.prototype, "set_mark", null);
 __decorate([
+    (0, common_1.UseGuards)(auth_guard_1.AuthGuard),
     (0, common_1.Post)('delete'),
     (0, common_1.HttpCode)(200),
     (0, swagger_1.ApiOperation)({
@@ -115,6 +126,12 @@ __decorate([
     __metadata("design:paramtypes", [request_dto_1.RequestWithUser, Object]),
     __metadata("design:returntype", Promise)
 ], StatementsController.prototype, "delete", null);
+__decorate([
+    (0, common_1.Get)('get'),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", []),
+    __metadata("design:returntype", Promise)
+], StatementsController.prototype, "get", null);
 exports.StatementsController = StatementsController = __decorate([
     (0, common_1.Controller)('statements'),
     __metadata("design:paramtypes", [statements_service_1.StatementsService])

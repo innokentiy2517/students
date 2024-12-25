@@ -45,6 +45,12 @@ export class LearningPlanController {
     }
 
     @UseGuards(AuthGuard)
+    @Post('get_learning_plan_for_group')
+    async getLearningPlanContentsForGroup(@Body() body: {speciality_id: number, start_study_year: number}) {
+        return this.learning_plan_service.getLearningPlanForGroup(body);
+    }
+
+    @UseGuards(AuthGuard)
     @Post('create')
     @ApiOperation({
         summary: 'Создание учебного плана',

@@ -39,7 +39,6 @@ model Groups {
 model Disciplines {
   id Int @default(autoincrement()) @id
   name String
-  statements     Statements[]
   learning_plan_contents Learning_plan_content[]
 }
 
@@ -49,8 +48,8 @@ model Statements {
   mark Int?
   student_id Int
   student Students @relation(fields: [student_id], references: [id], onDelete: Cascade)
-  discipline_id Int
-  discipline Disciplines @relation(fields: [discipline_id], references: [id], onDelete: Cascade)
+  learning_plan_content_id Int
+  learning_plan_content Learning_plan_content @relation(fields: [learning_plan_content_id], references: [id], onDelete: Cascade)
 }
 
 model Users {
@@ -76,6 +75,7 @@ model Learning_plan_content {
   number_of_hours Int
   attestation_type String
   semester Int
+  statements Statements[]
 }
 
 model Learning_plan {

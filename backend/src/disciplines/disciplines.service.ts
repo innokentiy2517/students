@@ -23,9 +23,6 @@ export class DisciplinesService {
     }
 
     async delete(id: number) {
-        await this.prisma_service.$transaction([
-            this.prisma_service.statements.deleteMany({where: {discipline_id: id}}),
-            this.prisma_service.disciplines.delete({where: {id}})
-        ])
+        await this.prisma_service.disciplines.delete({where: {id}})
     }
 }

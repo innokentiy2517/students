@@ -77,4 +77,26 @@ export declare class LearningPlanService {
         start_study_year: number;
         speciality_id: number;
     }, never, import("@prisma/client/runtime/library").DefaultArgs>;
+    getLearningPlanForGroup(body: {
+        speciality_id: number;
+        start_study_year: number;
+    }): import(".prisma/client").Prisma.PrismaPromise<({
+        learning_plan_contents: ({
+            discipline: {
+                name: string;
+                id: number;
+            };
+        } & {
+            id: number;
+            discipline_id: number;
+            learning_plan_id: number;
+            number_of_hours: number;
+            attestation_type: string;
+            semester: number;
+        })[];
+    } & {
+        id: number;
+        start_study_year: number;
+        speciality_id: number;
+    })[]>;
 }

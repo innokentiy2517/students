@@ -33,7 +33,7 @@ __decorate([
 __decorate([
     (0, swagger_1.ApiProperty)(),
     __metadata("design:type", Number)
-], StatementsDto.prototype, "discipline_id", void 0);
+], StatementsDto.prototype, "learning_plan_content_id", void 0);
 class CreateStatementDto {
 }
 exports.CreateStatementDto = CreateStatementDto;

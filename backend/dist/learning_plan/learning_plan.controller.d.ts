@@ -34,6 +34,28 @@ export declare class LearningPlanController {
         start_study_year: number;
         speciality_id: number;
     }>;
+    getLearningPlanContentsForGroup(body: {
+        speciality_id: number;
+        start_study_year: number;
+    }): Promise<({
+        learning_plan_contents: ({
+            discipline: {
+                name: string;
+                id: number;
+            };
+        } & {
+            id: number;
+            discipline_id: number;
+            learning_plan_id: number;
+            number_of_hours: number;
+            attestation_type: string;
+            semester: number;
+        })[];
+    } & {
+        id: number;
+        start_study_year: number;
+        speciality_id: number;
+    })[]>;
     create(req: RequestWithUser, body: CreateLearningPlanDto): Promise<void>;
     addContent(req: RequestWithUser, body: {
         learning_plan_id: number;

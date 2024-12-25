@@ -29,10 +29,7 @@ let DisciplinesService = class DisciplinesService {
         return this.prisma_service.disciplines.findUnique({ where: { id } });
     }
     async delete(id) {
-        await this.prisma_service.$transaction([
-            this.prisma_service.statements.deleteMany({ where: { discipline_id: id } }),
-            this.prisma_service.disciplines.delete({ where: { id } })
-        ]);
+        await this.prisma_service.disciplines.delete({ where: { id } });
     }
 };
 exports.DisciplinesService = DisciplinesService;

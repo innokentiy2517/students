@@ -2,7 +2,7 @@ import {
     BadRequestException,
     Body,
     Controller,
-    ForbiddenException,
+    ForbiddenException, Get,
     HttpCode,
     Post,
     Req,
@@ -35,14 +35,14 @@ export class StatementsController {
         @Req() req: RequestWithUser,
         @Body() body: CreateStatementDto
     ) {
-        if (req.user.role !== Roles.DIRECTORATE_EMPLOYEE) {
-            throw new ForbiddenException('Недостаточно прав');
+        if (![Roles.ADMIN, Roles.DIRECTORATE_EMPLOYEE].includes(req.user.role as Roles)) {
+            throw new ForbiddenException({message:'Недостаточно прав', cause: 'role'});
         }
 
         const statements = await this.statements_service.getActiveStatementsByStudentAndDiscipline(body.student_id, body.discipline_id);
 
         if(statements.length > 0) {
-            throw new BadRequestException('У студента уже есть активная ведомость по данному предмету');
+            throw new BadRequestException({message:'У студента уже есть активная ведомость по данному предмету', cause: 'discipline_id'});
         }
 
         return this.statements_service.create(body);
@@ -57,19 +57,24 @@ export class StatementsController {
         @Req() req: RequestWithUser,
         @Body() body: StatementChangeMarkDto
     ) {
-        if (req.user.role !== Roles.TEACHER) {
-            throw new ForbiddenException('Недостаточно прав');
+       if(![Roles.ADMIN, Roles.DIRECTORATE_EMPLOYEE, Roles.TEACHER].includes(req.user.role as Roles)) {
+            throw new ForbiddenException({
+                cause: 'role', message: 'Недостаточно прав'
+            });
         }
 
         const statement = await this.statements_service.getStatementById(body.id);
 
         if(!statement) {
-            throw new BadRequestException('Ведомость не найдена');
+            throw new BadRequestException({
+                cause: 'id', message: 'Ведомость не найдена'
+            });
         }
 
         return this.statements_service.set_mark(body);
     }
 
+    @UseGuards(AuthGuard)
     @Post('delete')
     @HttpCode(200)
     @ApiOperation({
@@ -99,18 +104,24 @@ export class StatementsController {
         @Req() req: RequestWithUser,
         @Body() body: { id: number }
     ) {
-        if (req.user.role !== Roles.DIRECTORATE_EMPLOYEE) {
-            throw new ForbiddenException('Недостаточно прав');
+        if(![Roles.ADMIN, Roles.DIRECTORATE_EMPLOYEE].includes(req.user.role as Roles)) {
+            throw new ForbiddenException({
+                message: 'Недостаточно прав',
+                cause: 'role'
+            });
         }
 
         const statement = await this.statements_service.getStatementById(body.id);
 
         if(!statement) {
-            throw new BadRequestException('Ведомость не найдена');
+            throw new BadRequestException({message:'Ведомость не найдена', cause: 'id'});
         }
 
         return this.statements_service.delete(body.id)
     }
 
-
+    @Get('get')
+    async get() {
+        return this.statements_service.get()
+    }
 }

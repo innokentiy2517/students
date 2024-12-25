@@ -1,14 +1,27 @@
 import {Student} from "../students/students_slice.ts";
-import {Discipline} from "../disciplines/disciplines_slice.ts";
-import {createSlice} from "@reduxjs/toolkit";
+import {createAsyncThunk, createSlice} from "@reduxjs/toolkit";
+import axios from "axios";
+import {ResponseError} from "../user/user_slice.ts";
+import {LearningPlanContent} from "../learning_plans/learning_plan_slice.ts";
 
 export interface Statement {
     id: number,
     date_of_issue: Date,
     student_id: number,
     student: Student,
-    discipline_id: number,
-    discipline: Discipline
+    learning_plan_content: LearningPlanContent,
+    mark?: number
+}
+
+export interface StatementAddFormType {
+    date_of_issue: Date,
+    student_id: number,
+    discipline_id: number
+}
+
+export interface StatementUpdateFormType {
+    id: number
+    mark: number
 }
 
 export interface StatementsState {
@@ -21,14 +34,113 @@ const initialState: StatementsState = {
     error: {}
 }
 
+const add_statement = createAsyncThunk(
+    'statements/add_statement',
+    async (statement: StatementAddFormType, {rejectWithValue, fulfillWithValue}) => {
+        try {
+            const response = await axios.post<Statement>('http://192.168.0.103:3000/statements/create',
+                {
+                    date_of_issue: statement.date_of_issue,
+                    student_id: statement.student_id,
+                    discipline_id: statement.discipline_id
+                },
+                {
+                    headers: {
+                        Authorization: `Bearer ${localStorage.getItem('token')}`
+                    }
+                });
+            return fulfillWithValue(response.data);
+        } catch (e) {
+            const error = e as { response: { data: ResponseError } };
+            return rejectWithValue(error.response.data);
+        }
+    }
+);
+
+const get_statements = createAsyncThunk('statements/get_statements', async () => {
+    const response = await axios.get<Statement[]>('http://192.168.0.103:3000/statements/get', {
+        headers: {
+            Authorization: `Bearer ${localStorage.getItem('token')}`
+        }
+    })
+    return response.data;
+});
+
+const set_mark = createAsyncThunk('statements/set_mark', async (data: StatementUpdateFormType, {rejectWithValue, fulfillWithValue}) => {
+    try {
+        const response = await axios.post<Statement>('http://192.168.0.103:3000/statements/set_mark',
+            {
+                id: data.id,
+                mark: data.mark
+            },
+            {
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem('token')}`
+                }
+            });
+        return fulfillWithValue(response.data);
+    } catch (e) {
+        const error = e as { response: { data: ResponseError } };
+        return rejectWithValue(error.response.data);
+    }
+})
+
+const delete_statement = createAsyncThunk('statements/delete', async (id: number, {rejectWithValue, fulfillWithValue}) => {
+    try {
+        const response = await axios.post<Statement>('http://192.168.0.103:3000/statements/delete',
+            {
+                id
+            },
+            {
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem('token')}`
+                }
+            });
+        return fulfillWithValue(response.data);
+    } catch (e) {
+        const error = e as { response: { data: ResponseError } };
+        return rejectWithValue(error.response.data);
+    }
+})
+
 export const statementsSlice = createSlice({
     name: 'statements',
     initialState,
-    reducers: {}
+    reducers: {},
+    extraReducers: {
+        [add_statement.fulfilled.type]: (state) => {
+            state.error = {};
+        },
+        [add_statement.rejected.type]: (state, action) => {
+            state.error[action.payload.cause] = action.payload.message;
+        },
+        [get_statements.fulfilled.type]: (state, action) => {
+            state.statements = action.payload;
+        },
+        [get_statements.rejected.type]: (state, action) => {
+            state.error[action.payload.cause] = action.payload.message;
+        },
+        [set_mark.fulfilled.type]: (state) => {
+            state.error = {};
+        },
+        [set_mark.rejected.type]: (state, action) => {
+            state.error[action.payload.cause] = action.payload.message;
+        },
+        [delete_statement.fulfilled.type]: (state) => {
+            state.error = {};
+        },
+        [delete_statement.rejected.type]: (state, action) => {
+            state.error[action.payload.cause] = action.payload.message;
+        }
+    }
 })
 
 export const StatementsActions = {
-    ...statementsSlice.actions
+    ...statementsSlice.actions,
+    add_statement,
+    get_statements,
+    set_mark,
+    delete_statement
 }
 
 export default statementsSlice.reducer;

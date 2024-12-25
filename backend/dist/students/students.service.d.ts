@@ -5,9 +5,9 @@ export declare class StudentsService {
     constructor(prisma_service: PrismaService);
     create(body: CreateStudentDto): Promise<void>;
     getStudentsByGroup(group_id: number): import(".prisma/client").Prisma.PrismaPromise<{
+        name: string;
         id: number;
         surname: string;
-        name: string;
         middle_name: string;
         date_of_birth: Date;
         gender: string;
@@ -15,9 +15,9 @@ export declare class StudentsService {
         document_number: string;
     }[]>;
     changeGroup(student_id: number, group_id: number): import(".prisma/client").Prisma.Prisma__StudentsClient<{
+        name: string;
         id: number;
         surname: string;
-        name: string;
         middle_name: string;
         date_of_birth: Date;
         gender: string;
@@ -25,9 +25,9 @@ export declare class StudentsService {
         document_number: string;
     }, never, import("@prisma/client/runtime/library").DefaultArgs>;
     deleteStudent(student_id: number): import(".prisma/client").Prisma.Prisma__StudentsClient<{
+        name: string;
         id: number;
         surname: string;
-        name: string;
         middle_name: string;
         date_of_birth: Date;
         gender: string;
@@ -35,9 +35,9 @@ export declare class StudentsService {
         document_number: string;
     }, never, import("@prisma/client/runtime/library").DefaultArgs>;
     findByDocumentNumber(document_number: string): Promise<{
+        name: string;
         id: number;
         surname: string;
-        name: string;
         middle_name: string;
         date_of_birth: Date;
         gender: string;
@@ -47,8 +47,8 @@ export declare class StudentsService {
     getAll(): import(".prisma/client").Prisma.PrismaPromise<({
         group: {
             speciality: {
-                id: number;
                 name: string;
+                id: number;
             };
         } & {
             id: number;
@@ -58,9 +58,9 @@ export declare class StudentsService {
             speciality_id: number;
         };
     } & {
+        name: string;
         id: number;
         surname: string;
-        name: string;
         middle_name: string;
         date_of_birth: Date;
         gender: string;
@@ -72,8 +72,8 @@ export declare class StudentsService {
     }): import(".prisma/client").Prisma.Prisma__StudentsClient<{
         group: {
             speciality: {
-                id: number;
                 name: string;
+                id: number;
             };
         } & {
             id: number;
@@ -83,9 +83,9 @@ export declare class StudentsService {
             speciality_id: number;
         };
     } & {
+        name: string;
         id: number;
         surname: string;
-        name: string;
         middle_name: string;
         date_of_birth: Date;
         gender: string;
@@ -93,9 +93,9 @@ export declare class StudentsService {
         document_number: string;
     }, null, import("@prisma/client/runtime/library").DefaultArgs>;
     update(body: StudentsDto): import(".prisma/client").Prisma.Prisma__StudentsClient<{
+        name: string;
         id: number;
         surname: string;
-        name: string;
         middle_name: string;
         date_of_birth: Date;
         gender: string;

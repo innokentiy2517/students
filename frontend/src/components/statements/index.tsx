@@ -5,7 +5,7 @@ import Add from "./add.tsx";
 import {useState} from "react";
 
 export default function Statements() {
-    const {get_all_students} = useActions();
+    const {get_statements} = useActions();
 
     const [current_tab, set_current_tab] = useState<string | null>('view');
 
@@ -13,7 +13,7 @@ export default function Statements() {
         <Tabs value={current_tab} onChange={set_current_tab} orientation='vertical'>
             <Tabs.List>
                 <Tabs.Tab value='view' onClick={() => {
-                    get_all_students();
+                    get_statements();
                 }}>
                     Просмотр ведомостей
                 </Tabs.Tab>

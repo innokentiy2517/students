@@ -19,7 +19,12 @@ let LearningPlanService = class LearningPlanService {
     getLearningPlans() {
         return this.prisma_service.learning_plan.findMany({
             include: {
-                speciality: true
+                speciality: true,
+                learning_plan_contents: {
+                    include: {
+                        discipline: true
+                    }
+                }
             }
         });
     }
@@ -94,6 +99,21 @@ let LearningPlanService = class LearningPlanService {
         return this.prisma_service.learning_plan.delete({
             where: {
                 id: body.id
+            }
+        });
+    }
+    getLearningPlanForGroup(body) {
+        return this.prisma_service.learning_plan.findMany({
+            where: {
+                speciality_id: body.speciality_id,
+                start_study_year: body.start_study_year
+            },
+            include: {
+                learning_plan_contents: {
+                    include: {
+                        discipline: true
+                    }
+                }
             }
         });
     }

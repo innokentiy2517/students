@@ -30,6 +30,9 @@ let LearningPlanController = class LearningPlanController {
     async getLearningPlan(req, body) {
         return this.learning_plan_service.getLearningPlanWithContent(body);
     }
+    async getLearningPlanContentsForGroup(body) {
+        return this.learning_plan_service.getLearningPlanForGroup(body);
+    }
     async create(req, body) {
         const { user } = req;
         if (![users_dto_1.Roles.ADMIN, users_dto_1.Roles.EDUCATION_EMPLOYEE].includes(user.role)) {
@@ -107,6 +110,14 @@ __decorate([
     __metadata("design:paramtypes", [request_dto_1.RequestWithUser, Object]),
     __metadata("design:returntype", Promise)
 ], LearningPlanController.prototype, "getLearningPlan", null);
+__decorate([
+    (0, common_1.UseGuards)(auth_guard_1.AuthGuard),
+    (0, common_1.Post)('get_learning_plan_for_group'),
+    __param(0, (0, common_1.Body)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", Promise)
+], LearningPlanController.prototype, "getLearningPlanContentsForGroup", null);
 __decorate([
     (0, common_1.UseGuards)(auth_guard_1.AuthGuard),
     (0, common_1.Post)('create'),

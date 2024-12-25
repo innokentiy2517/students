@@ -19,7 +19,7 @@ let StatementsService = class StatementsService {
     async create(statement) {
         await this.prisma_service.statements.create({ data: {
                 student_id: statement.student_id,
-                discipline_id: statement.discipline_id,
+                learning_plan_content_id: statement.discipline_id,
                 date_of_issue: statement.date_of_issue,
                 mark: null
             } });
@@ -28,7 +28,7 @@ let StatementsService = class StatementsService {
         return this.prisma_service.statements.findMany({
             where: {
                 student_id,
-                discipline_id,
+                learning_plan_content_id: discipline_id,
                 mark: null
             }
         });
@@ -48,6 +48,22 @@ let StatementsService = class StatementsService {
     }
     async delete(id) {
         await this.prisma_service.statements.delete({ where: { id } });
+    }
+    async get() {
+        return this.prisma_service.statements.findMany({
+            include: {
+                student: {
+                    include: {
+                        group: true
+                    }
+                },
+                learning_plan_content: {
+                    include: {
+                        discipline: true
+                    }
+                }
+            }
+        });
     }
 };
 exports.StatementsService = StatementsService;
