@@ -1,45 +1,34 @@
-import {Tabs} from "@mantine/core"
-import Table from "../table";
+import {Tabs} from "@mantine/core";
+import useActions from "../../store/hooks/useActions.ts";
+import View from "./view.tsx";
+import Add from "./add.tsx";
+import {useState} from "react";
 
-interface Groups {
-    group_cipher: string;
+export default function Specialities() {
+    const {get_groups} = useActions();
 
-    group_number: number;
+    const [current_tab, set_current_tab] = useState<string | null>('view');
 
-    start_study_year: number;
-
-    id: number;
-}
-
-const groups: Groups[] = [
-    {
-        group_cipher: 'A',
-        group_number: 1,
-        start_study_year: 2023,
-        id: 1
-    },
-    {
-        group_cipher: 'B',
-        group_number: 2,
-        start_study_year: 2023,
-        id: 2
-    },
-    {
-        group_cipher: 'C',
-        group_number: 3,
-        start_study_year: 2023,
-        id: 3
-    }
-]
-
-export default function Groups() {
     return (
-        <Tabs orientation='vertical'>
+        <Tabs value={current_tab} onChange={set_current_tab} orientation='vertical'>
             <Tabs.List>
-                <Tabs.Tab value='view'>Просмотр групп</Tabs.Tab>
+                <Tabs.Tab
+                    value='view'
+                    onClick={() => {
+                        get_groups();
+                    }}
+                >
+                    Просмотр групп
+                </Tabs.Tab>
+                <Tabs.Tab value='add'>
+                    Добавить группу
+                </Tabs.Tab>
             </Tabs.List>
             <Tabs.Panel value='view'>
-                <Table data={groups as Array<Record<string, string | number>>}/>
+                <View/>
+            </Tabs.Panel>
+            <Tabs.Panel value='add'>
+                <Add/>
             </Tabs.Panel>
         </Tabs>
     )

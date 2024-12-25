@@ -6,6 +6,8 @@ import Statements from "../../components/statements";
 import Disciplines from "../../components/disciplines";
 import Students from "../../components/students";
 import {useState} from "react";
+import Specialities from "../../components/specialities";
+import LearningPlans from "../../components/learning_plans";
 
 const TABS: Record<string, { label: string, component: JSX.Element }> = {
     STUDENTS: {
@@ -23,6 +25,14 @@ const TABS: Record<string, { label: string, component: JSX.Element }> = {
     STATEMENTS: {
         label: 'Ведомости',
         component: <Statements/>
+    },
+    SPECIALITIES: {
+        label: 'Специальности',
+        component: <Specialities/>
+    },
+    LEARNING_PLANS: {
+        label: 'Учебные планы',
+        component: <LearningPlans/>
     }
 }
 
@@ -31,7 +41,7 @@ export default function Main() {
 
     const navigate = useNavigate();
 
-    const [key, setKey] = useState('STUDENTS');
+    const [key, setKey] = useState('STATEMENTS');
 
     return (
     <AppShell

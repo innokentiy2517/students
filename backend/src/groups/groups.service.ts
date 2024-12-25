@@ -10,6 +10,7 @@ export class GroupsService {
     async create(body: CreateGroupDto): Promise<void> {
         await this.prismaService.groups.create({
             data: {
+                speciality_id: body.speciality_id,
                 group_number: body.group_number,
                 group_cipher: body.group_cipher,
                 start_study_year: body.start_study_year
@@ -18,7 +19,11 @@ export class GroupsService {
     }
 
     getGroups(): Promise<Groups[]> {
-        return this.prismaService.groups.findMany()
+        return this.prismaService.groups.findMany({
+            include: {
+                speciality: true,
+            }
+        })
     }
 
     async update(body: Groups) {
@@ -29,7 +34,8 @@ export class GroupsService {
             data: {
                 group_number: body.group_number,
                 group_cipher: body.group_cipher,
-                start_study_year: body.start_study_year
+                start_study_year: body.start_study_year,
+                speciality_id: body.speciality_id
             }
         })
     }
@@ -44,26 +50,26 @@ export class GroupsService {
     }
 
     async delete(id: number): Promise<void> {
-        await this.prismaService.$transaction(async (tx) => {
-            await tx.statements.deleteMany({
-                where: {
-                    student: {
-                        group_id: id
-                    }
-                }
-            });
+        await this.prismaService.groups.delete({where: {id}})
+    }
 
-            await tx.students.deleteMany({
-                where: {
-                    group_id: id
-                }
-            });
+    async getGroupBySpecialityAndNumber(speciality_id: number, group_number: number) {
+        return this.prismaService.groups.findFirst({
+            where: {
+                speciality_id,
+                group_number
+            }
+        })
+    }
 
-            await tx.groups.delete({
-                where: {
-                    id
-                }
-            })
+    async getGroupByParams(body: CreateGroupDto) {
+        return this.prismaService.groups.findFirst({
+            where: {
+                speciality_id: body.speciality_id,
+                group_number: body.group_number,
+                start_study_year: body.start_study_year,
+                group_cipher: body.group_cipher
+            }
         })
     }
 }

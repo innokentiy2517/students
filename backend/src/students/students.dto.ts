@@ -1,5 +1,5 @@
 import {Students} from "@prisma/client";
-import {ApiProperty, PartialType} from "@nestjs/swagger";
+import {ApiProperty} from "@nestjs/swagger";
 
 enum Gender {
     MALE = 'MALE',
@@ -27,6 +27,9 @@ class StudentsDto implements Students {
 
     @ApiProperty({enum: Gender})
     gender: string
+
+    @ApiProperty()
+    document_number: string
 }
 
 class CreateStudentDto {
@@ -45,8 +48,11 @@ class CreateStudentDto {
     @ApiProperty()
     group_id: number
 
-    @ApiProperty({enum: Gender})
-    gender: Gender
+    @ApiProperty()
+    gender: string
+
+    @ApiProperty()
+    document_number: string
 }
 
 export {StudentsDto, CreateStudentDto}

@@ -21,8 +21,9 @@ model Students {
   date_of_birth DateTime
   gender        String
   group_id      Int
-  group         Groups   @relation(fields: [group_id], references: [id])
+  group         Groups @relation(fields: [group_id], references: [id], onDelete: Cascade)
   statements    Statements[]
+  document_number String
 }
 
 model Groups {
@@ -31,14 +32,15 @@ model Groups {
   group_cipher String
   start_study_year Int
   students     Students[]
+  speciality_id Int @default(0)
+  speciality Specialities @relation(fields: [speciality_id], references: [id], onDelete: Cascade)
 }
 
 model Disciplines {
   id Int @default(autoincrement()) @id
   name String
-  number_of_hours Int
-  attestation_type String
   statements     Statements[]
+  learning_plan_contents Learning_plan_content[]
 }
 
 model Statements {
@@ -46,9 +48,9 @@ model Statements {
   date_of_issue DateTime
   mark Int?
   student_id Int
-  student Students @relation(fields: [student_id], references: [id])
+  student Students @relation(fields: [student_id], references: [id], onDelete: Cascade)
   discipline_id Int
-  discipline Disciplines @relation(fields: [discipline_id], references: [id])
+  discipline Disciplines @relation(fields: [discipline_id], references: [id], onDelete: Cascade)
 }
 
 model Users {
@@ -56,4 +58,30 @@ model Users {
   login String @unique
   password String
   role String
+}
+
+model Specialities {
+  id Int @default(autoincrement()) @id
+  name String @unique
+  learning_plans Learning_plan[]
+  groups Groups[]
+}
+
+model Learning_plan_content {
+  id Int @default(autoincrement()) @id
+  discipline_id Int
+  discipline Disciplines @relation(fields: [discipline_id], references: [id], onDelete: Cascade)
+  learning_plan_id Int
+  learning_plan Learning_plan @relation(fields: [learning_plan_id], references: [id], onDelete: Cascade)
+  number_of_hours Int
+  attestation_type String
+  semester Int
+}
+
+model Learning_plan {
+  id Int @default(autoincrement()) @id
+  speciality_id Int
+  speciality Specialities @relation(fields: [speciality_id], references: [id], onDelete: Cascade)
+  learning_plan_contents Learning_plan_content[]
+  start_study_year Int
 }

@@ -6,7 +6,7 @@ import {
     ForbiddenException,
     BadRequestException,
     Req,
-    HttpCode
+    HttpCode, Get
 } from '@nestjs/common';
 import {GroupsService} from "./groups.service";
 import {AuthGuard} from "../auth/auth.guard";
@@ -15,9 +15,8 @@ import {Roles} from "../users/users.dto"
 import {
     ApiBadRequestResponse, ApiBearerAuth, ApiBody,
     ApiCreatedResponse,
-    ApiForbiddenResponse, ApiHeader, ApiHeaders,
-    ApiOkResponse, ApiOperation,
-    ApiResponse, ApiUnauthorizedResponse
+    ApiForbiddenResponse, ApiHeaders,
+    ApiOkResponse, ApiOperation, ApiUnauthorizedResponse
 } from "@nestjs/swagger";
 import {Groups} from "@prisma/client";
 import {RequestWithUser} from "../auth/request.dto";
@@ -46,15 +45,25 @@ export class GroupsController {
     ): Promise<void> {
         const {user} = req;
 
-        if(user.role !== Roles.DIRECTORATE_EMPLOYEE) {
-            throw new ForbiddenException();
+        if(![Roles.ADMIN, Roles.DIRECTORATE_EMPLOYEE].includes(user.role as Roles)) {
+            throw new ForbiddenException({
+                cause: 'role',
+                message: 'Недостаточно прав'
+            });
+        }
+
+        if(await this.groups_service.getGroupByParams(body)){
+            throw new BadRequestException({
+                cause: 'group_number',
+                message: 'Группа с таким номером уже существует'
+            });
         }
 
         return this.groups_service.create(body)
     }
 
     @UseGuards(AuthGuard)
-    @Post('get_groups')
+    @Get('get_groups')
     @ApiOperation({
         description: 'Получение списка групп',
         summary: 'Получение списка групп'
@@ -86,19 +95,27 @@ export class GroupsController {
         @Body() body: Groups
     ): Promise<void> {
         const {user} = req;
-        if(user.role !== Roles.DIRECTORATE_EMPLOYEE) {
-            throw new ForbiddenException('Недостаточно прав');
+
+        if(![Roles.ADMIN, Roles.DIRECTORATE_EMPLOYEE].includes(user.role as Roles)) {
+            throw new ForbiddenException({
+                cause: 'role',
+                message: 'Недостаточно прав'
+            });
         }
 
         const group = await this.groups_service.getGroup(body.id);
 
         if(!group) {
-            throw new BadRequestException('Группа не найдена');
+            throw new BadRequestException({
+                cause: 'id',
+                message: 'Группа не найдена'
+            });
         }
 
         return this.groups_service.update(body)
     }
 
+    @UseGuards(AuthGuard)
     @ApiOperation({
         summary: 'Удаление группы',
         description: 'Удаление группы. При удалении группы будут удалены все связанные студенты, а также все связанные со студентами ведомости.',
@@ -121,14 +138,20 @@ export class GroupsController {
     ) {
         const {user} = req;
 
-        if(user.role !== Roles.DIRECTORATE_EMPLOYEE) {
-            throw new ForbiddenException('Недостаточно прав');
+        if(![Roles.ADMIN, Roles.DIRECTORATE_EMPLOYEE].includes(user.role as Roles)) {
+            throw new ForbiddenException({
+                cause: 'role',
+                message: 'Недостаточно прав'
+            });
         }
 
         const group = await this.groups_service.getGroup(body.id);
 
         if(!group) {
-            throw new BadRequestException('Группа не найдена');
+            throw new BadRequestException({
+                cause: 'id',
+                message: 'Группа не найдена'
+            });
         }
 
         return this.groups_service.delete(body.id)

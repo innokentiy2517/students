@@ -30,14 +30,14 @@ export interface AuthResponse {
 }
 
 const initialState: UserState = {
-    token: '',
-    role: '',
+    token: localStorage.getItem('token') || '',
+    role: localStorage.getItem('role') || '',
     error: {}
 }
 
 export const login = createAsyncThunk('user/login', async (data: LoginDto, {rejectWithValue, fulfillWithValue}) => {
     try {
-        const response = await axios.post<AuthResponse>('http://192.168.0.100:3000/users/login', {
+        const response = await axios.post<AuthResponse>('http://192.168.0.103:3000/users/login', {
             login: data.login,
             password: data.password
         })
@@ -54,7 +54,7 @@ export const login = createAsyncThunk('user/login', async (data: LoginDto, {reje
 
 export const register = createAsyncThunk('user/register', async (data: RegisterDto, {rejectWithValue, fulfillWithValue}) => {
     try{
-        const response = await axios.post<AuthResponse>('http://192.168.0.100:3000/users/register', {
+        const response = await axios.post<AuthResponse>('http://192.168.0.103:3000/users/register', {
             login: data.login,
             password: data.password,
             role: data.role
@@ -98,6 +98,12 @@ export const userSlice = createSlice({
             state.error[action.payload.cause] = action.payload.message;
         }
     }
-})
+});
+
+export const UserActions = {
+    login,
+    register,
+    ...userSlice.actions
+}
 
 export default userSlice.reducer;

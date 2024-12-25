@@ -5,7 +5,7 @@ import {
     UseGuards,
     ForbiddenException,
     HttpStatus,
-    Req, HttpCode,
+    Req, HttpCode, BadRequestException, Get,
 } from '@nestjs/common';
 import {AuthGuard} from "../auth/auth.guard";
 import {CreateStudentDto, StudentsDto} from "./students.dto";
@@ -25,6 +25,18 @@ export class StudentsController {
     constructor(private students_service: StudentsService) {}
 
     @UseGuards(AuthGuard)
+    @Get('get_all')
+    async getAll() {
+        return this.students_service.getAll()
+    }
+
+    @UseGuards(AuthGuard)
+    @Post('get')
+    async get(@Body() body: { id: number }) {
+        return this.students_service.get(body)
+    }
+
+    @UseGuards(AuthGuard)
     @ApiBearerAuth()
     @ApiHeaders([{
         name: 'Authorization',
@@ -37,59 +49,27 @@ export class StudentsController {
     ) {
         const {user} = req;
 
-        if(user.role !== Roles.DIRECTORATE_EMPLOYEE) {
+        if(![Roles.ADMIN, Roles.DIRECTORATE_EMPLOYEE].includes(user.role as Roles)) {
             throw new ForbiddenException({
                 message: 'Недостаточно прав',
                 cause: 'role'
+            });
+        }
+
+        if(await this.students_service.findByDocumentNumber(body.document_number)) {
+            throw new BadRequestException({
+                message: 'Студент с таким номером зачётки уже существует',
+                cause: 'document_number'
             });
         }
 
         return this.students_service.create(body)
     }
 
-    @Post('get_by_group')
-    @ApiBody({
-        schema: {
-            properties: {
-                group_id: {
-                    type: 'number',
-                    description: 'ID группы',
-                }
-            },
-            required: ['group_id']
-        }
-    })
-    @ApiOkResponse({type: [StudentsDto]})
-    async getByGroup(@Body() body: { group_id: number }): Promise<StudentsDto[]> {
-        return this.students_service.getStudentsByGroup(body.group_id)
-    }
-
     @UseGuards(AuthGuard)
-    @Post('change_group')
-    @ApiBearerAuth()
-    @ApiHeaders([
-        {
-            name: 'Authorization',
-            description: 'Токен пользователя',
-        }
-    ])
-    @ApiBody({schema: {properties: {student_id: {type: 'number'}, new_group_id: {type: 'number'}}}})
-    @ApiOkResponse({type: StudentsDto})
-    @ApiForbiddenResponse({
-        description: 'Недостаточно прав',
-    })
-    @HttpCode(HttpStatus.OK)
-    async changeGroup(
-        @Req() req: RequestWithUser,
-        @Body() body: { student_id: number, new_group_id: number }
-    ) {
-        if(req.user.role !== Roles.DIRECTORATE_EMPLOYEE) {
-            throw new ForbiddenException({
-                message: 'Недостаточно прав',
-                cause: 'role'
-            });
-        }
-        return this.students_service.changeGroup(body.student_id, body.new_group_id)
+    @Post('update')
+    async update(@Body() body: StudentsDto) {
+        return this.students_service.update(body)
     }
 
     @UseGuards(AuthGuard)
@@ -100,7 +80,7 @@ export class StudentsController {
             description: 'Токен пользователя',
         }
     ])
-    @Post('delete_student')
+    @Post('delete')
     @HttpCode(HttpStatus.OK)
     @ApiBody({schema: {properties: {student_id: {type: 'number'}}}})
     @ApiOkResponse()
@@ -109,15 +89,17 @@ export class StudentsController {
     })
     deleteStudent(
         @Req() req: RequestWithUser,
-        @Body() body: { student_id: number }
+        @Body() body: { id: number }
     ) {
-        if(req.user.role !== Roles.DIRECTORATE_EMPLOYEE) {
+        const {user} = req;
+
+        if(![Roles.ADMIN, Roles.DIRECTORATE_EMPLOYEE].includes(user.role as Roles)) {
             throw new ForbiddenException({
                 message: 'Недостаточно прав',
                 cause: 'role'
             });
         }
 
-        return this.students_service.deleteStudent(body.student_id)
+        return this.students_service.deleteStudent(body.id)
     }
 }

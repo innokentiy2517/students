@@ -13,6 +13,15 @@ class GroupsDto implements Groups{
 
     @ApiProperty()
     id: number;
+
+    @ApiProperty()
+    speciality_id: number;
+
+    @ApiProperty()
+    speciality: {
+        id: number;
+        name: string;
+    }
 }
 
 class CreateGroupDto {
@@ -24,6 +33,9 @@ class CreateGroupDto {
 
     @ApiProperty()
     start_study_year: number;
+
+    @ApiProperty()
+    speciality_id: number;
 }
 
 export {CreateGroupDto, GroupsDto}

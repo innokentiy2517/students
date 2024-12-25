@@ -48,7 +48,7 @@ export default function Login() {
                 style={{display: "flex", flexDirection: "column", gap: "10px"}}
             >
                 <TextInput placeholder='Логин' {...form.getInputProps('login')} />
-                <TextInput placeholder='Пароль' {...form.getInputProps('password')} />
+                <TextInput placeholder='Пароль' {...form.getInputProps('password')} type='password'/>
                 <Button type='submit'>Войти</Button>
             </form>
             <Group justify='flex-end' mt='xs'>
