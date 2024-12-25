@@ -40,7 +40,7 @@ const add_statement = createAsyncThunk(
     'statements/add_statement',
     async (statement: StatementAddFormType, {rejectWithValue, fulfillWithValue}) => {
         try {
-            const response = await axios.post<Statement>('http://192.168.0.103:3000/statements/create',
+            const response = await axios.post<Statement>('http://localhost:3000/statements/create',
                 {
                     date_of_issue: statement.date_of_issue,
                     student_id: statement.student_id,
@@ -60,7 +60,7 @@ const add_statement = createAsyncThunk(
 );
 
 const get_statements = createAsyncThunk('statements/get_statements', async () => {
-    const response = await axios.get<Statement[]>('http://192.168.0.103:3000/statements/get', {
+    const response = await axios.get<Statement[]>('http://localhost:3000/statements/get', {
         headers: {
             Authorization: `Bearer ${localStorage.getItem('token')}`
         }
@@ -69,7 +69,7 @@ const get_statements = createAsyncThunk('statements/get_statements', async () =>
 });
 
 const get_students_personal_card = createAsyncThunk('statements/get_students_personal_card', async (document_number: string) => {
-    const response = await axios.post<Statement[]>('http://192.168.0.103:3000/statements/get_students_personal_card', {
+    const response = await axios.post<Statement[]>('http://localhost:3000/statements/get_students_personal_card', {
         document_number
     },{
         headers: {
@@ -81,7 +81,7 @@ const get_students_personal_card = createAsyncThunk('statements/get_students_per
 
 const set_mark = createAsyncThunk('statements/set_mark', async (data: StatementUpdateFormType, {rejectWithValue, fulfillWithValue}) => {
     try {
-        const response = await axios.post<Statement>('http://192.168.0.103:3000/statements/set_mark',
+        const response = await axios.post<Statement>('http://localhost:3000/statements/set_mark',
             {
                 id: data.id,
                 mark: data.mark
@@ -100,7 +100,7 @@ const set_mark = createAsyncThunk('statements/set_mark', async (data: StatementU
 
 const delete_statement = createAsyncThunk('statements/delete', async (id: number, {rejectWithValue, fulfillWithValue}) => {
     try {
-        const response = await axios.post<Statement>('http://192.168.0.103:3000/statements/delete',
+        const response = await axios.post<Statement>('http://localhost:3000/statements/delete',
             {
                 id
             },

@@ -18,7 +18,7 @@ const initialState: DisciplinesState = {
 }
 
 export const get_disciplines = createAsyncThunk('disciplines/get_disciplines', async () => {
-    const response = await axios.get<Discipline[]>('http://192.168.0.103:3000/disciplines/get_disciplines', {
+    const response = await axios.get<Discipline[]>('http://localhost:3000/disciplines/get_disciplines', {
         headers: {
             Authorization: `Bearer ${localStorage.getItem('token')}`
         }
@@ -28,7 +28,7 @@ export const get_disciplines = createAsyncThunk('disciplines/get_disciplines', a
 
 export const add_discipline = createAsyncThunk('disciplines/add_discipline', async (name: string, {rejectWithValue, fulfillWithValue}) => {
     try {
-        const response = await axios.post<Discipline>('http://192.168.0.103:3000/disciplines/create',
+        const response = await axios.post<Discipline>('http://localhost:3000/disciplines/create',
             {
                 name
             },
@@ -46,7 +46,7 @@ export const add_discipline = createAsyncThunk('disciplines/add_discipline', asy
 
 export const update_discipline = createAsyncThunk('disciplines/update_discipline', async ({id, name}: { id: number, name: string }, {rejectWithValue, fulfillWithValue}) => {
     try {
-        const response = await axios.post<Discipline>('http://192.168.0.103:3000/disciplines/update',
+        const response = await axios.post<Discipline>('http://localhost:3000/disciplines/update',
             {
                 id,
                 name
@@ -65,7 +65,7 @@ export const update_discipline = createAsyncThunk('disciplines/update_discipline
 
 export const delete_discipline = createAsyncThunk('disciplines/delete', async (id: number, {rejectWithValue, fulfillWithValue}) => {
     try {
-        const response = await axios.post<Discipline>('http://192.168.0.103:3000/disciplines/delete',
+        const response = await axios.post<Discipline>('http://localhost:3000/disciplines/delete',
             {
                 id
             },

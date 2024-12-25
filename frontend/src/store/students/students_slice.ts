@@ -59,7 +59,7 @@ const initialState: StudentsState = {
 
 export const add_student = createAsyncThunk('students/add', async (student: StudentAddFormType, {rejectWithValue, fulfillWithValue}) => {
     try {
-        const response = await axios.post<Student>('http://192.168.0.103:3000/students/create',
+        const response = await axios.post<Student>('http://localhost:3000/students/create',
             {
                 ...student
             },
@@ -76,7 +76,7 @@ export const add_student = createAsyncThunk('students/add', async (student: Stud
 })
 
 export const get_all_students = createAsyncThunk('students/get_all', async () => {
-    const response = await axios.get<Student[]>('http://192.168.0.103:3000/students/get_all', {
+    const response = await axios.get<Student[]>('http://localhost:3000/students/get_all', {
         headers: {
             Authorization: `Bearer ${localStorage.getItem('token')}`
         }
@@ -86,7 +86,7 @@ export const get_all_students = createAsyncThunk('students/get_all', async () =>
 
 export const update_student = createAsyncThunk('students/update', async (student: StudentAddFormType & {id: number}, {rejectWithValue, fulfillWithValue}) => {
     try {
-        const response = await axios.post<Student>('http://192.168.0.103:3000/students/update',
+        const response = await axios.post<Student>('http://localhost:3000/students/update',
             {
                 ...student
             },
@@ -104,7 +104,7 @@ export const update_student = createAsyncThunk('students/update', async (student
 
 export const delete_student = createAsyncThunk('students/delete', async (id: number, {rejectWithValue, fulfillWithValue}) => {
     try {
-        const response = await axios.post<Student>('http://192.168.0.103:3000/students/delete',
+        const response = await axios.post<Student>('http://localhost:3000/students/delete',
             {
                 id
             },

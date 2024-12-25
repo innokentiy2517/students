@@ -31,7 +31,7 @@ const initialState: GroupsState = {
 
 export const add_group = createAsyncThunk('groups/add_group', async (data: GroupAddFormType, {rejectWithValue, fulfillWithValue}) => {
     try {
-        const response = await axios.post<Group>('http://192.168.0.103:3000/groups/create',
+        const response = await axios.post<Group>('http://localhost:3000/groups/create',
             {
                 group_cipher: data.group_cipher,
                 group_number: data.group_number,
@@ -51,7 +51,7 @@ export const add_group = createAsyncThunk('groups/add_group', async (data: Group
 });
 
 export const get_groups = createAsyncThunk('groups/get_groups', async () => {
-    const response = await axios.get<Group[]>('http://192.168.0.103:3000/groups/get_groups', {
+    const response = await axios.get<Group[]>('http://localhost:3000/groups/get_groups', {
         headers: {
             Authorization: `Bearer ${localStorage.getItem('token')}`
         }
@@ -61,7 +61,7 @@ export const get_groups = createAsyncThunk('groups/get_groups', async () => {
 
 export const update_group = createAsyncThunk('groups/update', async ({id, group_cipher, group_number, speciality_id, start_study_year}: GroupAddFormType & {id: number}, {rejectWithValue, fulfillWithValue}) => {
     try {
-        const response = await axios.post<Group>('http://192.168.0.103:3000/groups/update',
+        const response = await axios.post<Group>('http://localhost:3000/groups/update',
             {
                 id,
                 group_cipher,
@@ -83,7 +83,7 @@ export const update_group = createAsyncThunk('groups/update', async ({id, group_
 
 export const delete_group = createAsyncThunk('groups/delete', async (id: number, {rejectWithValue, fulfillWithValue}) => {
     try {
-        const response = await axios.post<Group>('http://192.168.0.103:3000/groups/delete',
+        const response = await axios.post<Group>('http://localhost:3000/groups/delete',
             {
                 id
             },

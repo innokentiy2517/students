@@ -37,7 +37,7 @@ const initialState: UserState = {
 
 export const login = createAsyncThunk('user/login', async (data: LoginDto, {rejectWithValue, fulfillWithValue}) => {
     try {
-        const response = await axios.post<AuthResponse>('http://192.168.0.103:3000/users/login', {
+        const response = await axios.post<AuthResponse>('http://localhost:3000/users/login', {
             login: data.login,
             password: data.password
         })
@@ -54,7 +54,7 @@ export const login = createAsyncThunk('user/login', async (data: LoginDto, {reje
 
 export const register = createAsyncThunk('user/register', async (data: RegisterDto, {rejectWithValue, fulfillWithValue}) => {
     try{
-        const response = await axios.post<AuthResponse>('http://192.168.0.103:3000/users/register', {
+        const response = await axios.post<AuthResponse>('http://localhost:3000/users/register', {
             login: data.login,
             password: data.password,
             role: data.role

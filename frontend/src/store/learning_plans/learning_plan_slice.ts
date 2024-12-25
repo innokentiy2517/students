@@ -61,7 +61,7 @@ const initialState: LearningPlanState = {
 }
 
 export const get_learning_plans = createAsyncThunk('learning_plan/get_learning_plans', async () => {
-    const response = await axios.get<LearningPlan[]>('http://192.168.0.103:3000/learning_plan/get_learning_plans', {
+    const response = await axios.get<LearningPlan[]>('http://localhost:3000/learning_plan/get_learning_plans', {
         headers: {
             Authorization: `Bearer ${localStorage.getItem('token')}`
         }
@@ -70,7 +70,7 @@ export const get_learning_plans = createAsyncThunk('learning_plan/get_learning_p
 });
 
 export const get_learning_plan = createAsyncThunk('learning_plan/get_learning_plan', async (id: number) => {
-    const response = await axios.post<LearningPlan>(`http://192.168.0.103:3000/learning_plan/get_learning_plan`,
+    const response = await axios.post<LearningPlan>(`http://localhost:3000/learning_plan/get_learning_plan`,
         {
             id
         },
@@ -84,7 +84,7 @@ export const get_learning_plan = createAsyncThunk('learning_plan/get_learning_pl
 
 export const add_learning_plan = createAsyncThunk('learning_plan/add_learning_plan', async (data: LearningPlanAddFormType, {rejectWithValue, fulfillWithValue}) => {
     try {
-        const response = await axios.post<LearningPlanAddFormType>('http://192.168.0.103:3000/learning_plan/create',
+        const response = await axios.post<LearningPlanAddFormType>('http://localhost:3000/learning_plan/create',
             {
                 start_study_year: data.start_study_year,
                 speciality_id: data.speciality_id
@@ -109,7 +109,7 @@ export const add_learning_plan_content = createAsyncThunk('learning_plan/add_lea
     semester: number
 }, {rejectWithValue, fulfillWithValue}) => {
     try {
-        const response = await axios.post<LearningPlan>('http://192.168.0.103:3000/learning_plan/add_content',
+        const response = await axios.post<LearningPlan>('http://localhost:3000/learning_plan/add_content',
             {
                 learning_plan_id,
                 discipline_id,
@@ -131,7 +131,7 @@ export const add_learning_plan_content = createAsyncThunk('learning_plan/add_lea
 
 export const delete_learning_plan_content = createAsyncThunk('learning_plan/delete_content', async (id: number, {rejectWithValue, fulfillWithValue}) => {
     try {
-        const response = await axios.post<LearningPlan>('http://192.168.0.103:3000/learning_plan/delete_content',
+        const response = await axios.post<LearningPlan>('http://localhost:3000/learning_plan/delete_content',
             {
                 id
             },
@@ -149,7 +149,7 @@ export const delete_learning_plan_content = createAsyncThunk('learning_plan/dele
 
 export const update_learning_plan = createAsyncThunk('learning_plan/update_learning_plan', async ({id, start_study_year, speciality_id}: { id: number, start_study_year: number, speciality_id: number }, {rejectWithValue, fulfillWithValue}) => {
     try {
-        const response = await axios.post<LearningPlan>('http://192.168.0.103:3000/learning_plan/update_start_year',
+        const response = await axios.post<LearningPlan>('http://localhost:3000/learning_plan/update_start_year',
             {
                 id,
                 start_study_year,
@@ -169,7 +169,7 @@ export const update_learning_plan = createAsyncThunk('learning_plan/update_learn
 
 export const delete_learning_plan = createAsyncThunk('learning_plan/delete_learning_plan', async (id: number, {rejectWithValue, fulfillWithValue}) => {
     try {
-        const response = await axios.post<LearningPlan>('http://192.168.0.103:3000/learning_plan/delete',
+        const response = await axios.post<LearningPlan>('http://localhost:3000/learning_plan/delete',
             {
                 id
             },

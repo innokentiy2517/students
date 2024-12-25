@@ -18,7 +18,7 @@ const initialState: SpecialitiesState = {
 }
 
 export const get_specialities = createAsyncThunk('specialities/get_specialities', async () => {
-    const response = await axios.get<Speciality[]>('http://192.168.0.103:3000/specialities/get_specialities', {
+    const response = await axios.get<Speciality[]>('http://localhost:3000/specialities/get_specialities', {
         headers: {
             Authorization: `Bearer ${localStorage.getItem('token')}`
         }
@@ -28,7 +28,7 @@ export const get_specialities = createAsyncThunk('specialities/get_specialities'
 
 export const add_speciality = createAsyncThunk('specialities/add_speciality', async (name: string, {rejectWithValue, fulfillWithValue}) => {
     try {
-        const response = await axios.post<Speciality>('http://192.168.0.103:3000/specialities/create',
+        const response = await axios.post<Speciality>('http://localhost:3000/specialities/create',
         {
             name
         },
@@ -46,7 +46,7 @@ export const add_speciality = createAsyncThunk('specialities/add_speciality', as
 
 export const update_speciality = createAsyncThunk('specialities/update_speciality', async ({id, name}: { id: number, name: string }, {rejectWithValue, fulfillWithValue}) => {
     try {
-        const response = await axios.post<Speciality>('http://192.168.0.103:3000/specialities/update',
+        const response = await axios.post<Speciality>('http://localhost:3000/specialities/update',
             {
                 id,
                 name
@@ -65,7 +65,7 @@ export const update_speciality = createAsyncThunk('specialities/update_specialit
 
 export const delete_speciality = createAsyncThunk('specialities/delete', async (id: number, {rejectWithValue, fulfillWithValue}) => {
     try {
-        const response = await axios.post<Speciality>('http://192.168.0.103:3000/specialities/delete',
+        const response = await axios.post<Speciality>('http://localhost:3000/specialities/delete',
             {
                 id
             },
