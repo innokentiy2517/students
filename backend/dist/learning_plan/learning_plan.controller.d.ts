@@ -13,13 +13,13 @@ export declare class LearningPlanController {
         id: number;
     }): Promise<{
         speciality: {
-            name: string;
             id: number;
+            name: string;
         };
         learning_plan_contents: ({
             discipline: {
-                name: string;
                 id: number;
+                name: string;
             };
         } & {
             id: number;
@@ -40,8 +40,8 @@ export declare class LearningPlanController {
     }): Promise<({
         learning_plan_contents: ({
             discipline: {
-                name: string;
                 id: number;
+                name: string;
             };
         } & {
             id: number;
@@ -78,7 +78,7 @@ export declare class LearningPlanController {
     }>;
     deleteContent(body: {
         id: number;
-    }): import(".prisma/client").Prisma.Prisma__Learning_plan_contentClient<{
+    }, req: RequestWithUser): import(".prisma/client").Prisma.Prisma__Learning_plan_contentClient<{
         id: number;
         discipline_id: number;
         learning_plan_id: number;
@@ -88,7 +88,7 @@ export declare class LearningPlanController {
     }, never, import("@prisma/client/runtime/library").DefaultArgs>;
     deleteLearningPlan(body: {
         id: number;
-    }): import(".prisma/client").Prisma.Prisma__Learning_planClient<{
+    }, req: RequestWithUser): import(".prisma/client").Prisma.Prisma__Learning_planClient<{
         id: number;
         start_study_year: number;
         speciality_id: number;

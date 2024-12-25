@@ -63,6 +63,24 @@ export const update_discipline = createAsyncThunk('disciplines/update_discipline
     }
 })
 
+export const delete_discipline = createAsyncThunk('disciplines/delete', async (id: number, {rejectWithValue, fulfillWithValue}) => {
+    try {
+        const response = await axios.post<Discipline>('http://192.168.0.103:3000/disciplines/delete',
+            {
+                id
+            },
+            {
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem('token')}`
+                }
+            });
+        return fulfillWithValue(response.data);
+    } catch (e) {
+        const error = e as { response: { data: ResponseError } };
+        return rejectWithValue(error.response.data);
+    }
+})
+
 export const disciplinesSlice = createSlice({
     name: 'disciplines',
     initialState,
@@ -85,6 +103,12 @@ export const disciplinesSlice = createSlice({
         },
         [update_discipline.rejected.type]: (state, action: PayloadAction<ResponseError>) => {
             state.error[action.payload.cause] = action.payload.message;
+        },
+        [delete_discipline.fulfilled.type]: (state) => {
+            state.error = {};
+        },
+        [delete_discipline.rejected.type]: (state, action: PayloadAction<ResponseError>) => {
+            state.error[action.payload.cause] = action.payload.message;
         }
     }
 })
@@ -93,6 +117,7 @@ export const DisciplinesActions = {
     get_disciplines,
     add_discipline,
     update_discipline,
+    delete_discipline,
     ...disciplinesSlice.actions
 }
 

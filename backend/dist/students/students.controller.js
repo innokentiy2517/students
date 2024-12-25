@@ -46,7 +46,14 @@ let StudentsController = class StudentsController {
         }
         return this.students_service.create(body);
     }
-    async update(body) {
+    async update(body, req) {
+        const { user } = req;
+        if (![users_dto_1.Roles.ADMIN, users_dto_1.Roles.DIRECTORATE_EMPLOYEE].includes(user.role)) {
+            throw new common_1.ForbiddenException({
+                cause: 'role',
+                message: 'Недостаточно прав'
+            });
+        }
         return this.students_service.update(body);
     }
     deleteStudent(req, body) {
@@ -95,8 +102,10 @@ __decorate([
     (0, common_1.UseGuards)(auth_guard_1.AuthGuard),
     (0, common_1.Post)('update'),
     __param(0, (0, common_1.Body)()),
+    __param(1, (0, common_1.Req)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [students_dto_1.StudentsDto]),
+    __metadata("design:paramtypes", [students_dto_1.StudentsDto,
+        request_dto_1.RequestWithUser]),
     __metadata("design:returntype", Promise)
 ], StudentsController.prototype, "update", null);
 __decorate([

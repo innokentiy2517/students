@@ -158,7 +158,19 @@ export class LearningPlanController {
         description: 'Токен авторизации',
     }])
     @ApiBearerAuth()
-    deleteContent(@Body() body: { id: number }) {
+    deleteContent(
+        @Body() body: { id: number },
+        @Req() req: RequestWithUser
+    ) {
+        const { user } = req;
+
+        if(![Roles.ADMIN, Roles.EDUCATION_EMPLOYEE].includes(user.role as Roles)) {
+            throw new ForbiddenException({
+                cause: 'role',
+                message: 'Недостаточно прав'
+            });
+        }
+
         return this.learning_plan_service.deleteContent(body);
     }
 
@@ -172,7 +184,19 @@ export class LearningPlanController {
         description: 'Токен авторизации',
     }])
     @ApiBearerAuth()
-    deleteLearningPlan(@Body() body: { id: number }) {
+    deleteLearningPlan(
+        @Body() body: { id: number },
+        @Req() req: RequestWithUser
+    ) {
+        const { user } = req;
+
+        if(![Roles.ADMIN, Roles.EDUCATION_EMPLOYEE].includes(user.role as Roles)) {
+            throw new ForbiddenException({
+                cause: 'role',
+                message: 'Недостаточно прав'
+            });
+        }
+
         return this.learning_plan_service.deleteLearningPlan(body);
     }
 }

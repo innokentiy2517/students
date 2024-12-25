@@ -55,7 +55,7 @@ export class GroupsController {
         if(await this.groups_service.getGroupByParams(body)){
             throw new BadRequestException({
                 cause: 'group_number',
-                message: 'Группа с таким номером уже существует'
+                message: 'Такая группа уже существует'
             });
         }
 

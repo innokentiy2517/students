@@ -75,10 +75,24 @@ let LearningPlanController = class LearningPlanController {
         }
         return this.learning_plan_service.updateStartYear(body);
     }
-    deleteContent(body) {
+    deleteContent(body, req) {
+        const { user } = req;
+        if (![users_dto_1.Roles.ADMIN, users_dto_1.Roles.EDUCATION_EMPLOYEE].includes(user.role)) {
+            throw new common_1.ForbiddenException({
+                cause: 'role',
+                message: 'Недостаточно прав'
+            });
+        }
         return this.learning_plan_service.deleteContent(body);
     }
-    deleteLearningPlan(body) {
+    deleteLearningPlan(body, req) {
+        const { user } = req;
+        if (![users_dto_1.Roles.ADMIN, users_dto_1.Roles.EDUCATION_EMPLOYEE].includes(user.role)) {
+            throw new common_1.ForbiddenException({
+                cause: 'role',
+                message: 'Недостаточно прав'
+            });
+        }
         return this.learning_plan_service.deleteLearningPlan(body);
     }
 };
@@ -189,8 +203,9 @@ __decorate([
         }]),
     (0, swagger_1.ApiBearerAuth)(),
     __param(0, (0, common_1.Body)()),
+    __param(1, (0, common_1.Req)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Object]),
+    __metadata("design:paramtypes", [Object, request_dto_1.RequestWithUser]),
     __metadata("design:returntype", void 0)
 ], LearningPlanController.prototype, "deleteContent", null);
 __decorate([
@@ -205,8 +220,9 @@ __decorate([
         }]),
     (0, swagger_1.ApiBearerAuth)(),
     __param(0, (0, common_1.Body)()),
+    __param(1, (0, common_1.Req)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Object]),
+    __metadata("design:paramtypes", [Object, request_dto_1.RequestWithUser]),
     __metadata("design:returntype", void 0)
 ], LearningPlanController.prototype, "deleteLearningPlan", null);
 exports.LearningPlanController = LearningPlanController = __decorate([

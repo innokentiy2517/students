@@ -55,7 +55,8 @@ let DisciplinesController = class DisciplinesController {
         return this.discipline_service.update(body);
     }
     async delete(req, body) {
-        if (req.user.role !== users_dto_1.Roles.EDUCATION_EMPLOYEE) {
+        const { user } = req;
+        if (![users_dto_1.Roles.ADMIN, users_dto_1.Roles.EDUCATION_EMPLOYEE].includes(user.role)) {
             throw new common_1.ForbiddenException({
                 message: 'Недостаточно прав',
                 cause: 'role'

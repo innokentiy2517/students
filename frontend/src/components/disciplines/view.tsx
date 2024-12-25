@@ -4,7 +4,7 @@ import {useState} from "react";
 import useActions from "../../store/hooks/useActions.ts";
 
 export default function View() {
-    const {get_disciplines, update_discipline} = useActions();
+    const {get_disciplines, update_discipline, delete_discipline} = useActions();
 
     const {disciplines} = useTypedSelector(state => state.disciplines)
 
@@ -69,8 +69,12 @@ export default function View() {
                                 <>
                                     <Button
                                         onClick={() => {
-                                            //TODO: integrate with backend
-                                            console.log('discipline.id', discipline.id)
+                                            new Promise((resolve) => {
+                                                resolve(delete_discipline(discipline.id))
+                                            }).then(() => {
+                                                set_row_to_redact(0);
+                                                get_disciplines();
+                                            });
                                         }}
                                     >
                                         Удалить

@@ -7,20 +7,20 @@ export declare class StudentsController {
     getAll(): Promise<({
         group: {
             speciality: {
-                name: string;
                 id: number;
+                name: string;
             };
         } & {
             id: number;
-            speciality_id: number;
-            start_study_year: number;
             group_number: number;
             group_cipher: string;
+            start_study_year: number;
+            speciality_id: number;
         };
     } & {
-        name: string;
         id: number;
         surname: string;
+        name: string;
         middle_name: string;
         date_of_birth: Date;
         gender: string;
@@ -32,20 +32,20 @@ export declare class StudentsController {
     }): Promise<{
         group: {
             speciality: {
-                name: string;
                 id: number;
+                name: string;
             };
         } & {
             id: number;
-            speciality_id: number;
-            start_study_year: number;
             group_number: number;
             group_cipher: string;
+            start_study_year: number;
+            speciality_id: number;
         };
     } & {
-        name: string;
         id: number;
         surname: string;
+        name: string;
         middle_name: string;
         date_of_birth: Date;
         gender: string;
@@ -53,10 +53,10 @@ export declare class StudentsController {
         document_number: string;
     }>;
     create(req: RequestWithUser, body: CreateStudentDto): Promise<void>;
-    update(body: StudentsDto): Promise<{
-        name: string;
+    update(body: StudentsDto, req: RequestWithUser): Promise<{
         id: number;
         surname: string;
+        name: string;
         middle_name: string;
         date_of_birth: Date;
         gender: string;
@@ -66,9 +66,9 @@ export declare class StudentsController {
     deleteStudent(req: RequestWithUser, body: {
         id: number;
     }): import(".prisma/client").Prisma.Prisma__StudentsClient<{
-        name: string;
         id: number;
         surname: string;
+        name: string;
         middle_name: string;
         date_of_birth: Date;
         gender: string;

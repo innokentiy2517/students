@@ -101,7 +101,9 @@ export class DisciplinesController {
         @Req() req: RequestWithUser,
         @Body() body: { id: number }
     ){
-        if(req.user.role !== Roles.EDUCATION_EMPLOYEE) {
+        const {user} = req;
+
+        if(![Roles.ADMIN, Roles.EDUCATION_EMPLOYEE].includes(user.role as Roles)) {
             throw new ForbiddenException({
                 message: 'Недостаточно прав',
                 cause: 'role'

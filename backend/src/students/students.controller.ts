@@ -68,7 +68,19 @@ export class StudentsController {
 
     @UseGuards(AuthGuard)
     @Post('update')
-    async update(@Body() body: StudentsDto) {
+    async update(
+        @Body() body: StudentsDto,
+        @Req() req: RequestWithUser
+    ) {
+        const { user } = req;
+
+        if(![Roles.ADMIN, Roles.DIRECTORATE_EMPLOYEE].includes(user.role as Roles)) {
+            throw new ForbiddenException({
+                cause: 'role',
+                message: 'Недостаточно прав'
+            });
+        }
+
         return this.students_service.update(body)
     }
 
